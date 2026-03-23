@@ -1,0 +1,39 @@
+{
+  "categories": [
+    {
+      "name": "Currently Reading",
+      "books": [
+        {
+          "title": "The Art of Doing Science and Engineering",
+          "author": "Richard Hamming",
+          "notes": ""
+        },
+        {
+          "title": "Freedom of the Hills",
+          "author": "The Mountaineers",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "name": "Investing & Decision-Making",
+      "books": [
+        {
+          "title": "The Most Important Thing",
+          "author": "Howard Marks",
+          "notes": ""
+        },
+        {
+          "title": "Thinking in Bets",
+          "author": "Annie Duke",
+          "notes": ""
+        },
+        {
+          "title": "Sources of Power",
+          "author": "Gary Klein",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

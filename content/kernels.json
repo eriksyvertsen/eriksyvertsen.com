@@ -1,0 +1,77 @@
+{
+  "intro": "This is a list of foundational ideas I think might be true.",
+  "themes": [
+    {
+      "name": "Decision Making",
+      "ideas": [
+        "Steer into the pain",
+        "Occam's razor means the explanation requiring fewest assumptions is probably right\u2014it's about probabilities, not simplicity",
+        "Johnson's razor: what must be true? what must remain true? what would make this entirely untrue?",
+        "Optimization necessarily trades off for fragility"
+      ]
+    },
+    {
+      "name": "Accountability",
+      "ideas": [
+        "Accountability cannot be given, it can only be taken",
+        "Accountability means being responsible for the pain of fixing it when things go wrong",
+        "Necessary alignment: Accountability \u2194 Responsibility \u2194 Authority"
+      ]
+    },
+    {
+      "name": "Thinking",
+      "ideas": [
+        "Intelligence: ability to transform information into effective action",
+        "The map is not the territory\u2014all models are wrong, some are useful",
+        "We are haunted by dead ideas and lifeless old beliefs from past generations",
+        "Intelligence is an emergent property of language, not originating from human brains but running on them"
+      ]
+    },
+    {
+      "name": "Communication",
+      "ideas": [
+        "Memes are crucial for spreading messages and creating cohesion online",
+        "On the internet, every idea can find an audience and every audience can find an idea"
+      ]
+    },
+    {
+      "name": "Finance & Economics",
+      "ideas": [
+        "Finance abstracts to two axes: speed of insights and depth of insights",
+        "Finance represents time travel for value\u2014pulling tomorrow's value forward",
+        "For the first time, the cost of getting attention is greater than the cost of producing content"
+      ]
+    },
+    {
+      "name": "Emotion & Relationships",
+      "ideas": [
+        "Criticisms represent requests the critic didn't feel comfortable making directly",
+        "Anger is a derivative emotion of fear",
+        "Don't mistake high bandwidth for fully knowing someone in close relationships",
+        "We bring new context into relationships\u2014embrace the unknowable"
+      ]
+    },
+    {
+      "name": "Being",
+      "ideas": [
+        "Fundamental conflict: desire for freedom vs need to belong",
+        "One has time for everything they do\u2014trouble making time is trouble making choices",
+        "Identity is defined by interests where one can legitimately compete for status",
+        "Life optimizes for Flow or State, not both\u2014Flow is dynamic, State is static",
+        "Possessions make us happy when they promote social connections, get us outdoors, or keep us active"
+      ]
+    },
+    {
+      "name": "Systems",
+      "ideas": [
+        "Decentralization increases innovation at the expense of efficiency",
+        "Centralization increases efficiency at the expense of fragility",
+        "Statistical probabilities are meaningless in complex deterministic systems",
+        "Cannot make complex systems deterministic by narrowing aperture",
+        "Vertical integration increases decision speed by reducing coordination costs",
+        "Speed allows quick tests and fast failures, enabling more risk-taking for non-linear outcomes",
+        "Inclusive nationalism based on principles rather than static identities supports liberal democracy"
+      ]
+    }
+  ]
+}
