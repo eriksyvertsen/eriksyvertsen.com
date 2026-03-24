@@ -7,46 +7,58 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div>
-      <h1>About</h1>
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+        <h1>About</h1>
+      </div>
 
-      <div style={{ height: "calc(var(--unit) * 4)" }} />
+      <div className="article-body">
+        <p>
+          I serve as Chief Legal Officer and head of Customer Relations at{" "}
+          <a href="https://www.angellist.com" target="_blank" rel="noopener noreferrer">
+            AngelList
+          </a>
+          , where we build infrastructure for private markets&mdash;over $170B
+          in assets across 25,000+ funds and SPVs. My work sits at the intersection
+          of law, finance, and technology: designing scalable legal frameworks,
+          launching new capital products, and rethinking how operational and post-sales
+          teams function.
+        </p>
 
-      <p>
-        I&apos;m Chief Legal Officer at a fintech company, focused on building
-        scalable legal and compliance frameworks that enable rapid growth while
-        managing regulatory risk.
-      </p>
+        <p>
+          I sit on the Board of Directors of Belltower Fund Group and Republic,
+          and lecture on entrepreneurial finance at Columbia Business School. Before
+          AngelList, I was a partner at Olshan Frome Wolosky in New York, building
+          the firm&apos;s Venture Capital and Emerging Company Practice.
+        </p>
 
-      <h2>Legal Engineering</h2>
-      <p>
-        My work sits at the intersection of law and technology. I build systems
-        for contract automation, compliance monitoring, regulatory reporting, and
-        risk assessment. The goal is to make legal operations as precise and
-        scalable as software engineering.
-      </p>
+        <h2>Background</h2>
+        <p>
+          MBA from Columbia Business School. JD, cum laude, from Benjamin N. Cardozo
+          School of Law. Before law, I worked as a software engineer building
+          distributed systems&mdash;a foundation that shapes how I approach legal
+          problems today.
+        </p>
 
-      <h2>Technical Background</h2>
-      <p>
-        Before law, I worked as a software engineer building distributed
-        systems. This technical foundation informs how I approach legal
-        problems&mdash;with systematic thinking, automation, and a focus on
-        scalable solutions.
-      </p>
+        <h2>Mountains</h2>
+        <p>
+          I ski mountaineer. The overlap between route-finding in variable
+          conditions and navigating complex regulatory terrain is not a metaphor
+          I force&mdash;it&apos;s just how my brain works. Both require reading
+          systems, committing to a line, and staying alert for the moment when the
+          line stops working.
+        </p>
 
-      <h2>Mountains</h2>
-      <p>
-        Ski mountaineering provides perspective and teaches risk management
-        skills that translate directly to legal practice. Both require careful
-        assessment of complex systems, understanding interdependencies, and
-        making decisions with incomplete information.
-      </p>
-
-      <h2>Writing</h2>
-      <p>
-        I write about legal engineering, technical explorations of low-level
-        systems, personal reflections, and mountain adventures. The common thread
-        is systematic thinking applied to complex problems.
-      </p>
+        <h2>This Site</h2>
+        <p>
+          A place to collect writing on legal engineering, apps I vibe code,
+          foundational ideas I return to, and trip reports from the mountains.
+          The{" "}
+          <a href="/librarian">Librarian</a>{" "}
+          is an AI interface to my knowledge graph&mdash;a Roam Research database
+          spanning venture capital, regulation, psychology, philosophy, and
+          organizational behavior.
+        </p>
+      </div>
     </div>
   );
 }

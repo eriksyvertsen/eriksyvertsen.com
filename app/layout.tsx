@@ -24,8 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="site-layout">
-          <Nav />
+        <Nav />
+        <div className="container">
           <main className="main-content">{children}</main>
         </div>
         <LibrarianOrb />

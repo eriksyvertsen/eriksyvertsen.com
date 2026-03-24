@@ -18,29 +18,26 @@ const seedArticles = [
 
 export default async function LegalEngineeringPage() {
   const mdxArticles = await getArticles("legal-engineering");
-  const articles =
-    mdxArticles.length > 0
-      ? mdxArticles
-      : seedArticles;
+  const articles = mdxArticles.length > 0 ? mdxArticles : seedArticles;
 
   return (
     <div>
-      <h1>Legal Engineering</h1>
-      <div style={{ height: "calc(var(--unit) * 4)" }} />
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+        <h1>Legal Engineering</h1>
+      </div>
 
       {articles.map((article) => (
-        <Link
-          key={article.slug}
-          href={`/legal-engineering/${article.slug}`}
-          style={{ textDecoration: "none", borderBottom: "none" }}
-        >
-          <div className="card">
-            <div className="card-title">{article.title}</div>
-            <div className="card-meta">{article.date}</div>
-            <div className="card-desc">{article.description}</div>
-            <div className="card-link">read_article</div>
+        <div key={article.slug} className="list-item">
+          <div className="list-item-title">
+            <Link href={`/legal-engineering/${article.slug}`}>
+              {article.title}
+            </Link>
           </div>
-        </Link>
+          <div className="list-item-meta">{article.date}</div>
+          {article.description && (
+            <div className="list-item-desc">{article.description}</div>
+          )}
+        </div>
       ))}
     </div>
   );

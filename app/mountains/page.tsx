@@ -9,12 +9,17 @@ export default function MountainsPage() {
 
   return (
     <div>
-      <h1>Mountains</h1>
-      <div style={{ height: "calc(var(--unit) * 4)" }} />
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+        <h1>Mountains</h1>
+        <div style={{ height: "calc(var(--unit) * 2)" }} />
+        <p className="meta">
+          Ski mountaineering, alpine routes, and trip reports.
+        </p>
+      </div>
 
       {!hasStrava ? (
         <p className="meta">
-          Strava integration pending. Connect your Strava account to see trip
+          Strava integration pending. Connect your account to surface trip
           reports here.
         </p>
       ) : (
@@ -55,16 +60,18 @@ async function MountainsList() {
             distance: number;
             type: string;
           }) => (
-            <div key={activity.id} className="card">
-              <div className="card-title">{activity.name}</div>
-              <div className="card-meta">
+            <div key={activity.id} className="list-item">
+              <div className="list-item-title" style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 500, letterSpacing: "-0.01em" }}>
+                {activity.name}
+              </div>
+              <div className="meta" style={{ marginTop: 4 }}>
                 {new Date(activity.start_date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}{" "}
-                · {Math.round(activity.total_elevation_gain)}m vertical ·{" "}
-                {(activity.distance / 1000).toFixed(1)}km
+                &middot; {Math.round(activity.total_elevation_gain)}m vertical
+                &middot; {(activity.distance / 1000).toFixed(1)}km
               </div>
             </div>
           )
@@ -72,6 +79,6 @@ async function MountainsList() {
       </div>
     );
   } catch {
-    return <p className="meta">No achievements recorded yet.</p>;
+    return <p className="meta">No adventures recorded yet.</p>;
   }
 }

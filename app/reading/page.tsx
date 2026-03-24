@@ -6,11 +6,13 @@ import readingData from "@/content/reading.json";
 export default function ReadingPage() {
   return (
     <div>
-      <h1>Reading</h1>
-      <div style={{ height: "calc(var(--unit) * 2)" }} />
-      <p className="meta" style={{ marginBottom: "calc(var(--unit) * 4)" }}>
-        Books that shaped my thinking, loosely organized. Updated as I go.
-      </p>
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+        <h1>Reading</h1>
+        <div style={{ height: "calc(var(--unit) * 2)" }} />
+        <p className="meta">
+          Books that shaped my thinking, loosely organized. Updated as I go.
+        </p>
+      </div>
 
       {readingData.categories.map((category) => (
         <div key={category.name} style={{ marginBottom: "calc(var(--unit) * 6)" }}>
@@ -34,27 +36,19 @@ function ReadingItem({
 
   return (
     <div
-      style={{
-        padding: "calc(var(--unit) * 3) 0",
-        borderBottom: "1px solid var(--border)",
-        cursor: hasNotes ? "pointer" : "default",
-      }}
+      className="list-item"
+      style={{ cursor: hasNotes ? "pointer" : "default" }}
       onClick={() => hasNotes && setOpen(!open)}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
         <div>
           <div
-            style={{
-              fontWeight: "normal",
-              marginBottom: 4,
-              color: hasNotes ? "var(--accent)" : "var(--text)",
-            }}
+            className="list-item-title"
+            style={{ color: hasNotes ? "var(--accent)" : "var(--text)" }}
           >
             {book.title}
           </div>
-          <div style={{ color: "var(--muted)", fontSize: 14 }}>
-            {book.author}
-          </div>
+          <div className="list-item-meta">{book.author}</div>
         </div>
         {hasNotes && (
           <span style={{ color: "var(--muted)", fontSize: 14 }}>
@@ -63,13 +57,7 @@ function ReadingItem({
         )}
       </div>
 
-      <div
-        style={{
-          maxHeight: open ? "500px" : "0",
-          overflow: "hidden",
-          transition: "max-height 0.3s ease",
-        }}
-      >
+      {open && (
         <p
           style={{
             marginTop: "calc(var(--unit) * 2)",
@@ -80,7 +68,7 @@ function ReadingItem({
         >
           {book.notes}
         </p>
-      </div>
+      )}
     </div>
   );
 }

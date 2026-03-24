@@ -8,30 +8,26 @@ export const metadata: Metadata = {
 export default function AppsPage() {
   return (
     <div>
-      <h1>Apps</h1>
-      <div style={{ height: "calc(var(--unit) * 4)" }} />
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+        <h1>Apps</h1>
+        <div style={{ height: "calc(var(--unit) * 2)" }} />
+        <p className="meta">Things I vibe code.</p>
+      </div>
 
       {apps.map((app) => (
-        <a
-          key={app.slug}
-          href={app.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none", borderBottom: "none" }}
-        >
-          <div className="card">
-            <div className="card-title">{app.title}</div>
-            <div className="tech-tags">
-              {app.tech.map((t) => (
-                <span key={t} className="tech-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-            <div className="card-desc">{app.description}</div>
-            <div className="card-link">visit_app</div>
+        <div key={app.slug} className="list-item">
+          <div className="list-item-title">
+            <a href={app.url} target="_blank" rel="noopener noreferrer">
+              {app.title}
+            </a>
           </div>
-        </a>
+          <div className="tech-tags" style={{ marginTop: 4 }}>
+            {app.tech.map((t) => (
+              <span key={t} className="tech-tag">{t}</span>
+            ))}
+          </div>
+          <div className="list-item-desc">{app.description}</div>
+        </div>
       ))}
     </div>
   );

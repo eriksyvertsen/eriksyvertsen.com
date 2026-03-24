@@ -9,8 +9,14 @@ export const metadata: Metadata = {
 export default function LibrarianPage() {
   return (
     <div>
-      <h1>The Librarian</h1>
-      <div style={{ height: "calc(var(--unit) * 4)" }} />
+      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 4)" }}>
+        <h1>The Librarian</h1>
+        <div style={{ height: "calc(var(--unit) * 2)" }} />
+        <p className="meta">
+          An AI interface to my knowledge graph&mdash;1,280 pages of notes on
+          venture capital, regulation, psychology, philosophy, and more.
+        </p>
+      </div>
       <LibrarianChat />
     </div>
   );
