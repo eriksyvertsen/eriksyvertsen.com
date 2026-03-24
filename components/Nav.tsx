@@ -28,11 +28,10 @@ export default function Nav() {
           </Link>
           <nav>
             <ul className="site-nav">
-              {links.map(({ href, label }, i) => {
+              {links.map(({ href, label }) => {
                 const isActive = pathname.startsWith(href);
                 return (
-                  <li key={href} style={{ display: "flex", alignItems: "center", gap: "calc(var(--unit) * 2.5)" }}>
-                    {i > 0 && <span className="nav-separator">&middot;</span>}
+                  <li key={href}>
                     <Link
                       href={href}
                       className={`nav-link${isActive ? " active" : ""}`}
