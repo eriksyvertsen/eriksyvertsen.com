@@ -2,23 +2,20 @@ import Link from "next/link";
 import { getArticles } from "@/lib/mdx";
 
 const navLinks = [
-  { href: "/legal-engineering", label: "Legal Engineering" },
+  { href: "/musings", label: "Musings" },
   { href: "/apps", label: "Apps" },
   { href: "/kernels", label: "Kernels" },
-  { href: "/musings", label: "Musings" },
   { href: "/mountains", label: "Mountains" },
   { href: "/reading", label: "Reading" },
   { href: "/about", label: "About" },
 ];
 
 export default async function Home() {
-  const legalArticles = await getArticles("legal-engineering");
   const musingsArticles = await getArticles("musings");
 
-  const allArticles = [
-    ...legalArticles.map((a) => ({ ...a, section: "Legal Engineering", path: "legal-engineering" })),
-    ...musingsArticles.map((a) => ({ ...a, section: "Musings", path: "musings" })),
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const allArticles = musingsArticles
+    .map((a) => ({ ...a, section: "Musings", path: "musings" }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const recent = allArticles[0];
 
