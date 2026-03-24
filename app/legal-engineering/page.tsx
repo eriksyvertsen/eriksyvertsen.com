@@ -21,7 +21,7 @@ export default async function LegalEngineeringPage() {
   const articles = mdxArticles.length > 0 ? mdxArticles : seedArticles;
 
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>Legal Engineering</h1>
       </div>
@@ -39,6 +39,6 @@ export default async function LegalEngineeringPage() {
           )}
         </div>
       ))}
-    </div>
+    </div></div>
   );
 }

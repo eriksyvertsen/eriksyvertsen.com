@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function LibrarianPage() {
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 4)" }}>
         <h1>The Librarian</h1>
         <div style={{ height: "calc(var(--unit) * 2)" }} />
@@ -18,6 +18,6 @@ export default function LibrarianPage() {
         </p>
       </div>
       <LibrarianChat />
-    </div>
+    </div></div>
   );
 }

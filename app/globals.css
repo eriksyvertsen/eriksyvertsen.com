@@ -78,14 +78,89 @@ a:hover {
   border-bottom-color: var(--accent-hover);
 }
 
-/* ── Single-column centered layout ── */
+/* ── Single-column centered layout (content pages) ── */
 .container {
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* ── Site header ── */
+/* ══════════════════════════════════════════════
+   HOME PAGE — owns the full viewport
+   ══════════════════════════════════════════════ */
+
+.home-landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--unit) * 8) 24px;
+}
+
+.home-content {
+  max-width: 720px;
+  width: 100%;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 48px;
+  margin-bottom: calc(var(--unit) * 5);
+}
+
+.home-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0;
+  line-height: 2.2;
+}
+
+.home-nav-link {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: none !important;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.home-nav-link:hover {
+  color: var(--text);
+  border-bottom: none !important;
+}
+
+.home-nav-separator {
+  color: var(--border);
+  margin: 0 calc(var(--unit) * 1.5);
+  font-size: 16px;
+  user-select: none;
+}
+
+.home-recent {
+  margin-top: calc(var(--unit) * 12);
+  text-align: center;
+}
+
+.home-recent-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: calc(var(--unit) * 2);
+}
+
+.home-recent-entry {
+  margin-bottom: 6px;
+}
+
+
+/* ══════════════════════════════════════════════
+   SITE HEADER (non-home pages)
+   ══════════════════════════════════════════════ */
+
 .site-header {
   padding: calc(var(--unit) * 4) 0;
 }
@@ -143,6 +218,7 @@ a:hover {
   font-size: 12px;
   user-select: none;
 }
+
 
 /* ── Main content area ── */
 .main-content {
@@ -253,6 +329,18 @@ a:hover {
 
 /* ── Responsive ── */
 @media (max-width: 640px) {
+  .home-title {
+    font-size: 36px;
+  }
+
+  .home-nav-link {
+    font-size: 15px;
+  }
+
+  .home-nav-separator {
+    margin: 0 calc(var(--unit) * 1);
+  }
+
   h1 {
     font-size: 32px;
   }

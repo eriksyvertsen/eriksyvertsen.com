@@ -25,9 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Nav />
-        <div className="container">
-          <main className="main-content">{children}</main>
-        </div>
+        <main>{children}</main>
         <LibrarianOrb />
         <CommandPalette />
         <KeyboardShortcuts />

@@ -12,55 +12,34 @@ const navLinks = [
 
 export default function Home() {
   return (
-    <div
-      style={{
-        minHeight: "80vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "calc(var(--unit) * 12) 0",
-      }}
-    >
-      <h1 style={{ marginBottom: "calc(var(--unit) * 5)" }}>Erik Syvertsen</h1>
+    <div className="home-landing">
+      <div className="home-content">
+        <h1 className="home-title">Erik Syvertsen</h1>
 
-      <nav>
-        <ul
-          style={{
-            listStyle: "none",
-            display: "flex",
-            flexDirection: "column",
-            gap: "calc(var(--unit) * 1.5)",
-          }}
-        >
-          {navLinks.map(({ href, label }) => (
-            <li key={href}>
-              <Link href={href} className="nav-link" style={{ fontSize: 17 }}>
+        <nav className="home-nav" aria-label="Main navigation">
+          {navLinks.map(({ href, label }, i) => (
+            <span key={href}>
+              <Link href={href} className="nav-link home-nav-link">
                 {label}
               </Link>
-            </li>
+              {i < navLinks.length - 1 && (
+                <span className="home-nav-separator" aria-hidden="true">
+                  ·
+                </span>
+              )}
+            </span>
           ))}
-        </ul>
-      </nav>
+        </nav>
 
-      <div style={{ marginTop: "calc(var(--unit) * 10)" }}>
-        <div
-          className="heading-font"
-          style={{
-            fontSize: 13,
-            textTransform: "uppercase" as const,
-            letterSpacing: "0.08em",
-            color: "var(--muted)",
-            marginBottom: "calc(var(--unit) * 2)",
-          }}
-        >
-          Recent
+        <div className="home-recent">
+          <div className="home-recent-label heading-font">Recent</div>
+          <p className="home-recent-entry">
+            <Link href="/legal-engineering/angellist-legal-culture-code">
+              AngelList Legal Culture Code: Lazy Like a Fox
+            </Link>
+          </p>
+          <p className="meta">January 2019 · Legal Engineering</p>
         </div>
-        <p style={{ marginBottom: 6 }}>
-          <Link href="/legal-engineering/angellist-legal-culture-code">
-            AngelList Legal Culture Code: Lazy Like a Fox
-          </Link>
-        </p>
-        <p className="meta">January 2019 &middot; Legal Engineering</p>
       </div>
     </div>
   );

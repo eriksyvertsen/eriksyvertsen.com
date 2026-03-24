@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function AppsPage() {
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>Apps</h1>
         <div style={{ height: "calc(var(--unit) * 2)" }} />
@@ -29,6 +29,6 @@ export default function AppsPage() {
           <div className="list-item-desc">{app.description}</div>
         </div>
       ))}
-    </div>
+    </div></div>
   );
 }

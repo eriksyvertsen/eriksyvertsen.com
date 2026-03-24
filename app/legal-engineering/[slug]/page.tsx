@@ -25,7 +25,7 @@ export default async function LegalEngineeringArticle({ params }: Props) {
   if (!article) notFound();
 
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ paddingTop: "calc(var(--unit) * 6)" }}>
         <p className="meta">
           {article.meta.date}
@@ -42,6 +42,6 @@ export default async function LegalEngineeringArticle({ params }: Props) {
       <div className="article-body">
         <MDXRemote source={article.content} />
       </div>
-    </div>
+    </div></div>
   );
 }

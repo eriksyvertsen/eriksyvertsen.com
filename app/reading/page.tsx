@@ -5,7 +5,7 @@ import readingData from "@/content/reading.json";
 
 export default function ReadingPage() {
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>Reading</h1>
         <div style={{ height: "calc(var(--unit) * 2)" }} />
@@ -22,7 +22,7 @@ export default function ReadingPage() {
           ))}
         </div>
       ))}
-    </div>
+    </div></div>
   );
 }
 

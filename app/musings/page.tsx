@@ -10,7 +10,7 @@ export default async function MusingsPage() {
   const articles = await getArticles("musings");
 
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>Musings</h1>
       </div>
@@ -32,6 +32,6 @@ export default async function MusingsPage() {
           </div>
         ))
       )}
-    </div>
+    </div></div>
   );
 }

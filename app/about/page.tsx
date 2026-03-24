@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>About</h1>
       </div>
@@ -59,6 +59,6 @@ export default function AboutPage() {
           organizational behavior.
         </p>
       </div>
-    </div>
+    </div></div>
   );
 }

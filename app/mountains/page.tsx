@@ -8,7 +8,7 @@ export default function MountainsPage() {
   const hasStrava = !!process.env.STRAVA_REFRESH_TOKEN;
 
   return (
-    <div>
+    <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
         <h1>Mountains</h1>
         <div style={{ height: "calc(var(--unit) * 2)" }} />
@@ -16,6 +16,9 @@ export default function MountainsPage() {
           Ski mountaineering, alpine routes, and trip reports.
         </p>
       </div>
+
+      {/* For full-bleed images, place them outside this container wrapper */}
+      {/* or use: width: 100vw; margin-left: calc(50% - 50vw); */}
 
       {!hasStrava ? (
         <p className="meta">
@@ -25,7 +28,7 @@ export default function MountainsPage() {
       ) : (
         <MountainsList />
       )}
-    </div>
+    </div></div>
   );
 }
 
