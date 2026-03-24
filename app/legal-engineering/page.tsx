@@ -6,39 +6,48 @@ export const metadata: Metadata = {
   title: "Legal Engineering",
 };
 
-const seedArticles = [
-  {
-    slug: "angellist-legal-culture-code",
-    title: "AngelList Legal Culture Code: Lazy Like a Fox",
-    date: "2019-01-24",
-    description:
-      "How AngelList Legal maximizes leverage through efficiency, taking a software development approach to legal problems.",
-  },
-];
-
 export default async function LegalEngineeringPage() {
-  const mdxArticles = await getArticles("legal-engineering");
-  const articles = mdxArticles.length > 0 ? mdxArticles : seedArticles;
+  const articles = await getArticles("legal-engineering");
 
   return (
-    <div className="container"><div className="main-content">
-      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
-        <h1>Legal Engineering</h1>
-      </div>
-
-      {articles.map((article) => (
-        <div key={article.slug} className="list-item">
-          <div className="list-item-title">
-            <Link href={`/legal-engineering/${article.slug}`}>
-              {article.title}
-            </Link>
-          </div>
-          <div className="list-item-meta">{article.date}</div>
-          {article.description && (
-            <div className="list-item-desc">{article.description}</div>
-          )}
+    <div className="container">
+      <div className="main-content">
+        <div
+          style={{
+            padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)",
+          }}
+        >
+          <h1>Legal Engineering</h1>
+          <p className="meta" style={{ marginTop: "calc(var(--unit) * 2)" }}>
+            Policy advocacy, legal infrastructure, and the systems that shape
+            private markets.
+          </p>
         </div>
-      ))}
-    </div></div>
+
+        {articles.map((article) => (
+          <div key={article.slug} className="list-item">
+            <div className="list-item-title">
+              <Link href={`/legal-engineering/${article.slug}`}>
+                {article.title}
+              </Link>
+            </div>
+            <div className="list-item-meta">
+              {new Date(article.date).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+              {article.readTime && ` · ${article.readTime} min read`}
+            </div>
+            {article.description && (
+              <div className="list-item-desc">{article.description}</div>
+            )}
+          </div>
+        ))}
+
+        {articles.length === 0 && (
+          <p className="meta">Essays coming soon.</p>
+        )}
+      </div>
+    </div>
   );
 }
