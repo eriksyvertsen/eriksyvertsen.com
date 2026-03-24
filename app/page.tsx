@@ -14,46 +14,39 @@ export default function Home() {
   return (
     <div
       style={{
-        minHeight: "70vh",
+        minHeight: "80vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "calc(var(--unit) * 16) 0",
+        padding: "calc(var(--unit) * 12) 0",
       }}
     >
-      <h1 style={{ marginBottom: "calc(var(--unit) * 4)" }}>Erik Syvertsen</h1>
+      <h1 style={{ marginBottom: "calc(var(--unit) * 5)" }}>Erik Syvertsen</h1>
 
-      <nav
-        style={{
-          display: "flex",
-          gap: "calc(var(--unit) * 3)",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        {navLinks.map(({ href, label }, i) => (
-          <span key={href} style={{ display: "flex", alignItems: "center", gap: "calc(var(--unit) * 3)" }}>
-            {i > 0 && (
-              <span style={{ color: "var(--border)", fontSize: 14, userSelect: "none" as const }}>
-                &middot;
-              </span>
-            )}
-            <Link
-              href={href}
-              className="nav-link"
-              style={{ fontSize: 17 }}
-            >
-              {label}
-            </Link>
-          </span>
-        ))}
+      <nav>
+        <ul
+          style={{
+            listStyle: "none",
+            display: "flex",
+            flexDirection: "column",
+            gap: "calc(var(--unit) * 1.5)",
+          }}
+        >
+          {navLinks.map(({ href, label }) => (
+            <li key={href}>
+              <Link href={href} className="nav-link" style={{ fontSize: 17 }}>
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
 
-      <div style={{ marginTop: "calc(var(--unit) * 12)" }}>
+      <div style={{ marginTop: "calc(var(--unit) * 10)" }}>
         <div
           className="heading-font"
           style={{
-            fontSize: 14,
+            fontSize: 13,
             textTransform: "uppercase" as const,
             letterSpacing: "0.08em",
             color: "var(--muted)",
@@ -62,7 +55,7 @@ export default function Home() {
         >
           Recent
         </div>
-        <p style={{ marginBottom: 8 }}>
+        <p style={{ marginBottom: 6 }}>
           <Link href="/legal-engineering/angellist-legal-culture-code">
             AngelList Legal Culture Code: Lazy Like a Fox
           </Link>
