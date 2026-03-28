@@ -26,6 +26,12 @@ export default function LibrarianChat() {
     inputRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    if (!streaming) {
+      inputRef.current?.focus();
+    }
+  }, [streaming]);
+
   async function sendMessage() {
     if (!input.trim() || streaming) return;
 
