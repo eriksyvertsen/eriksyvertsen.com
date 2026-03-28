@@ -26,11 +26,6 @@ export default function LibrarianChat() {
     inputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    if (!streaming) {
-      inputRef.current?.focus();
-    }
-  }, [streaming]);
 
   async function sendMessage() {
     if (!input.trim() || streaming) return;
@@ -148,7 +143,6 @@ export default function LibrarianChat() {
           onKeyDown={handleKeyDown}
           placeholder="Ask The Librarian..."
           rows={1}
-          disabled={streaming}
         />
         <button
           style={sendBtnStyle}
