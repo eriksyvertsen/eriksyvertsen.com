@@ -19,17 +19,20 @@ export async function getArticles(section: string): Promise<ArticleMeta[]> {
 
   const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
-  const articles = files.map((file) => {
-    const raw = fs.readFileSync(path.join(dir, file), "utf-8");
-    const { data } = matter(raw);
-    return {
-      slug: file.replace(/\.mdx$/, ""),
-      title: data.title || file.replace(/\.mdx$/, ""),
-      date: data.date || "",
-      description: data.description || "",
-      readTime: data.readTime,
-    };
-  });
+  const articles = files
+    .map((file) => {
+      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
+      const { data } = matter(raw);
+      return {
+        slug: file.replace(/\.mdx$/, ""),
+        title: data.title || file.replace(/\.mdx$/, ""),
+        date: data.date || "",
+        description: data.description || "",
+        readTime: data.readTime,
+        published: data.published !== false,
+      };
+    })
+    .filter((a) => a.published);
 
   return articles.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
