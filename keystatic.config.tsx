@@ -1,15 +1,13 @@
 import { config, collection, fields } from "@keystatic/core";
 
 export default config({
-  storage: process.env.KEYSTATIC_GITHUB_CLIENT_ID
-    ? {
-        kind: "github" as const,
-        repo: {
-          owner: "eriksyvertsen",
-          name: "eriksyvertsen.com",
-        },
-      }
-    : { kind: "local" as const },
+  storage: {
+    kind: "github" as const,
+    repo: {
+      owner: "eriksyvertsen",
+      name: "eriksyvertsen.com",
+    },
+  },
 
   ui: {
     brand: { name: "eriksyvertsen.com" },
