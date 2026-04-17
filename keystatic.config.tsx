@@ -40,6 +40,57 @@ export default config({
   },
 
   collections: {
+    reading: collection({
+      label: "Reading",
+      slugField: "title",
+      path: "content/reading/*",
+      format: { data: "yaml" },
+      schema: {
+        title: fields.slug({ name: { label: "Title" } }),
+        author: fields.text({ label: "Author" }),
+        category: fields.text({
+          label: "Category",
+          description: 'e.g. "Currently Reading" or "Investing & Decision-Making"',
+        }),
+        notes: fields.text({ label: "Notes", multiline: true }),
+        published: fields.checkbox({ label: "Published", defaultValue: true }),
+        order: fields.integer({ label: "Display Order", defaultValue: 0 }),
+      },
+    }),
+
+    apps: collection({
+      label: "Apps",
+      slugField: "title",
+      path: "content/apps/*",
+      format: { data: "yaml" },
+      schema: {
+        title: fields.slug({ name: { label: "Title" } }),
+        url: fields.text({ label: "URL" }),
+        tech: fields.array(fields.text({ label: "Technology" }), {
+          label: "Tech Stack",
+        }),
+        description: fields.text({ label: "Description", multiline: true }),
+        published: fields.checkbox({ label: "Published", defaultValue: true }),
+        order: fields.integer({ label: "Display Order", defaultValue: 0 }),
+      },
+    }),
+
+    kernels: collection({
+      label: "Kernels",
+      slugField: "title",
+      path: "content/kernels/*",
+      format: { data: "yaml" },
+      schema: {
+        title: fields.slug({ name: { label: "Theme Name" } }),
+        ideas: fields.array(
+          fields.text({ label: "Idea" }),
+          { label: "Ideas" }
+        ),
+        published: fields.checkbox({ label: "Published", defaultValue: true }),
+        order: fields.integer({ label: "Display Order", defaultValue: 0 }),
+      },
+    }),
+
     mountains: collection({
       label: "Mountains",
       slugField: "title",

@@ -1,0 +1,9 @@
+title: Big Mac Energy Converter
+url: '#'
+tech:
+  - JavaScript
+  - HTML
+  - CSS
+description: A whimsical energy unit converter that translates various energy measurements into Big Mac equivalents. My first vibe-coded app using GPT-2!
+published: true
+order: 1

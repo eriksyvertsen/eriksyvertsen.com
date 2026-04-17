@@ -1,23 +1,12 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/mdx";
-
-const navLinks = [
-  { href: "/musings", label: "Musings" },
-  { href: "/apps", label: "Apps" },
-  { href: "/kernels", label: "Kernels" },
-  { href: "/mountains", label: "Mountains" },
-  { href: "/reading", label: "Reading" },
-  { href: "/about", label: "About" },
-];
+import { getEnabledNavLinks } from "@/lib/site-config";
 
 export default async function Home() {
+  const navLinks = getEnabledNavLinks();
   const musingsArticles = await getArticles("musings");
 
-  const allArticles = musingsArticles
-    .map((a) => ({ ...a, section: "Musings", path: "musings" }))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  const recent = allArticles[0];
+  const recent = musingsArticles[0];
 
   return (
     <div className="home-landing">
@@ -31,9 +20,7 @@ export default async function Home() {
                 {label}
               </Link>
               {i < navLinks.length - 1 && (
-                <span className="home-nav-separator" aria-hidden="true">
-                  ·
-                </span>
+                <span className="home-nav-separator" aria-hidden="true">·</span>
               )}
             </span>
           ))}
@@ -43,16 +30,14 @@ export default async function Home() {
           <div className="home-recent">
             <div className="home-recent-label heading-font">Recent</div>
             <p className="home-recent-entry">
-              <Link href={`/${recent.path}/${recent.slug}`}>
-                {recent.title}
-              </Link>
+              <Link href={`/musings/${recent.slug}`}>{recent.title}</Link>
             </p>
             <p className="meta">
               {new Date(recent.date).toLocaleDateString("en-US", {
                 month: "long",
                 year: "numeric",
               })}{" "}
-              · {recent.section}
+              · Musings
             </p>
           </div>
         )}

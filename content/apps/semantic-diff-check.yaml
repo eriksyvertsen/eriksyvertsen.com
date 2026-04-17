@@ -1,0 +1,9 @@
+title: Semantic Diff Check
+url: '#'
+tech:
+  - Python
+  - Flask
+  - NLP
+description: A tool for semantic comparison of text changes that goes beyond simple string matching to understand meaning and context.
+published: true
+order: 0

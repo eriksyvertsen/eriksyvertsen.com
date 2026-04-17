@@ -1,0 +1,9 @@
+title: Library of Babel
+url: '#'
+tech:
+  - JavaScript
+  - HTML
+  - CSS
+description: A digital implementation of Borges' infinite library concept, generating and searching through all possible combinations of text.
+published: true
+order: 2
