@@ -1,6 +1,7 @@
-import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+
+const REPO = "eriksyvertsen/eriksyvertsen.com";
+const CONTENT_PATH = "content/mountains";
 
 export interface MountainEntry {
   slug: string;
@@ -8,43 +9,57 @@ export interface MountainEntry {
   stravaActivityId: string;
   published: boolean;
   order: number;
-  // Keystatic stores image fields as the filename; we prepend the publicPath
   supplementPhotos: string[];
   notes: string;
 }
 
-export function getMountainEntries(): MountainEntry[] {
-  const dir = path.join(process.cwd(), "content/mountains");
-  if (!fs.existsSync(dir)) return [];
+export async function getMountainEntries(): Promise<MountainEntry[]> {
+  try {
+    // Fetch directory listing from GitHub (where Keystatic stores content)
+    const dirRes = await fetch(
+      `https://api.github.com/repos/${REPO}/contents/${CONTENT_PATH}`,
+      { next: { revalidate: 300 } }
+    );
+    if (!dirRes.ok) return [];
 
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
-    .map((f) => {
-      const raw = fs.readFileSync(path.join(dir, f), "utf-8");
-      const { data } = matter(raw);
+    const files: Array<{ name: string; download_url: string }> =
+      await dirRes.json();
+    const yamlFiles = files.filter(
+      (f) => f.name.endsWith(".yaml") || f.name.endsWith(".yml")
+    );
 
-      // Keystatic stores image filenames relative to the `directory` option.
-      // We prepend the publicPath (/mountains) to get the web URL.
-      const supplementPhotos: string[] = (data.supplementPhotos || []).map(
-        (p: string) => {
-          if (!p) return null;
-          // Already absolute path
-          if (p.startsWith("/")) return p;
-          return `/mountains/${p}`;
-        }
-      ).filter(Boolean);
+    const entries = await Promise.all(
+      yamlFiles.map(async (file) => {
+        const contentRes = await fetch(file.download_url, {
+          next: { revalidate: 300 },
+        });
+        const raw = await contentRes.text();
+        const { data } = matter(raw);
 
-      return {
-        slug: f.replace(/\.(yaml|yml)$/, ""),
-        title: (data.title?.value ?? data.title) || "",
-        stravaActivityId: String(data.stravaActivityId || "").trim(),
-        published: data.published !== false,
-        order: typeof data.order === "number" ? data.order : 999,
-        supplementPhotos,
-        notes: data.notes || "",
-      };
-    })
-    .filter((e) => e.published && e.stravaActivityId)
-    .sort((a, b) => a.order - b.order);
+        const supplementPhotos: string[] = (data.supplementPhotos || [])
+          .map((p: string) => {
+            if (!p) return null;
+            if (p.startsWith("/")) return p;
+            return `/mountains/${p}`;
+          })
+          .filter(Boolean);
+
+        return {
+          slug: file.name.replace(/\.(yaml|yml)$/, ""),
+          title: (data.title?.value ?? data.title) || "",
+          stravaActivityId: String(data.stravaActivityId || "").trim(),
+          published: data.published !== false,
+          order: typeof data.order === "number" ? data.order : 999,
+          supplementPhotos,
+          notes: data.notes || "",
+        };
+      })
+    );
+
+    return entries
+      .filter((e) => e.published && e.stravaActivityId)
+      .sort((a, b) => a.order - b.order);
+  } catch {
+    return [];
+  }
 }

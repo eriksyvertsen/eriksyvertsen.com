@@ -11,7 +11,7 @@ export const revalidate = 3600;
 export default async function MountainsPage() {
   if (!isSectionEnabled("mountains")) notFound();
 
-  const entries = getMountainEntries();
+  const entries = await getMountainEntries();
   const stravaReady = !!process.env.STRAVA_REFRESH_TOKEN;
 
   return (
