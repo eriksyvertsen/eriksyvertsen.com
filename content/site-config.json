@@ -1,0 +1,9 @@
+{
+  "musings": true,
+  "mountains": true,
+  "about": true,
+  "reading": false,
+  "apps": false,
+  "kernels": false,
+  "librarian": false
+}
