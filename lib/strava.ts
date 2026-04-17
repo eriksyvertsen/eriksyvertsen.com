@@ -42,6 +42,17 @@ export async function getActivities(perPage = 30) {
   );
 }
 
+export async function getActivity(activityId: string) {
+  const token = await getAccessToken();
+
+  const res = await fetch(`${STRAVA_API}/activities/${activityId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) throw new Error(`Strava activity ${activityId} not found`);
+  return res.json();
+}
+
 export async function getActivityPhotos(activityId: number | string) {
   const token = await getAccessToken();
 
