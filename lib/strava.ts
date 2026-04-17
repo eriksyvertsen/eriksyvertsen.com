@@ -42,7 +42,7 @@ export async function getActivities(perPage = 30) {
   );
 }
 
-export async function getActivityPhotos(activityId: number) {
+export async function getActivityPhotos(activityId: number | string) {
   const token = await getAccessToken();
 
   const res = await fetch(

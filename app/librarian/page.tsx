@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isSectionEnabled } from "@/lib/site-config";
 import LibrarianChat from "@/components/LibrarianChat";
 
 export const metadata: Metadata = {
@@ -7,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function LibrarianPage() {
+  if (!isSectionEnabled("librarian")) notFound();
   return (
     <div className="container"><div className="main-content">
       <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 4)" }}>

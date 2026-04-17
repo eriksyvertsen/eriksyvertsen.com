@@ -1,87 +1,79 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isSectionEnabled } from "@/lib/site-config";
+import { getMountainEntries } from "@/lib/mountains";
+import { getActivity, getActivityPhotos } from "@/lib/strava";
+import ActivityCard from "@/components/ActivityCard";
 
-export const metadata: Metadata = {
-  title: "Mountains",
-};
+export const metadata: Metadata = { title: "Mountains" };
+export const revalidate = 3600;
 
-export default function MountainsPage() {
-  const hasStrava = !!process.env.STRAVA_REFRESH_TOKEN;
+export default async function MountainsPage() {
+  if (!isSectionEnabled("mountains")) notFound();
+
+  const entries = getMountainEntries();
+  const stravaReady = !!process.env.STRAVA_REFRESH_TOKEN;
 
   return (
-    <div className="container"><div className="main-content">
-      <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
-        <h1>Mountains</h1>
-        <div style={{ height: "calc(var(--unit) * 2)" }} />
-        <p className="meta">
-          Ski mountaineering, alpine routes, and trip reports.
-        </p>
+    <div className="container">
+      <div className="main-content">
+        <div style={{ padding: "calc(var(--unit) * 12) 0 calc(var(--unit) * 6)" }}>
+          <h1>Mountains</h1>
+          <div style={{ height: "calc(var(--unit) * 2)" }} />
+          <p className="meta">Ski mountaineering, alpine routes, and trip reports.</p>
+        </div>
+
+        {!stravaReady ? (
+          <p className="meta">Strava integration pending.</p>
+        ) : entries.length === 0 ? (
+          <p className="meta">No adventures curated yet.</p>
+        ) : (
+          <ActivityFeed entries={entries} />
+        )}
       </div>
-
-      {/* For full-bleed images, place them outside this container wrapper */}
-      {/* or use: width: 100vw; margin-left: calc(50% - 50vw); */}
-
-      {!hasStrava ? (
-        <p className="meta">
-          Strava integration pending. Connect your account to surface trip
-          reports here.
-        </p>
-      ) : (
-        <MountainsList />
-      )}
-    </div></div>
+    </div>
   );
 }
 
-async function MountainsList() {
-  try {
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
+async function ActivityFeed({
+  entries,
+}: {
+  entries: ReturnType<typeof getMountainEntries>;
+}) {
+  const results = await Promise.allSettled(
+    entries.map(async (entry) => {
+      const [activity, photos] = await Promise.all([
+        getActivity(entry.stravaActivityId),
+        getActivityPhotos(entry.stravaActivityId),
+      ]);
+      return { entry, activity, photos };
+    })
+  );
 
-    const res = await fetch(`${baseUrl}/api/strava/activities`, {
-      next: { revalidate: 3600 },
-    });
+  const loaded = results
+    .filter(
+      (r): r is PromiseFulfilledResult<{ entry: typeof entries[0]; activity: unknown; photos: unknown[] }> =>
+        r.status === "fulfilled"
+    )
+    .map((r) => r.value);
 
-    if (!res.ok) {
-      return <p className="meta">Unable to load activities.</p>;
-    }
-
-    const activities = await res.json();
-
-    if (!activities.length) {
-      return <p className="meta">No mountain activities yet.</p>;
-    }
-
-    return (
-      <div>
-        {activities.map(
-          (activity: {
-            id: number;
-            name: string;
-            start_date: string;
-            total_elevation_gain: number;
-            distance: number;
-            type: string;
-          }) => (
-            <div key={activity.id} className="list-item">
-              <div className="list-item-title" style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 500, letterSpacing: "-0.01em" }}>
-                {activity.name}
-              </div>
-              <div className="meta" style={{ marginTop: 4 }}>
-                {new Date(activity.start_date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}{" "}
-                &middot; {Math.round(activity.total_elevation_gain)}m vertical
-                &middot; {(activity.distance / 1000).toFixed(1)}km
-              </div>
-            </div>
-          )
-        )}
-      </div>
-    );
-  } catch {
-    return <p className="meta">No adventures recorded yet.</p>;
+  if (loaded.length === 0) {
+    return <p className="meta">Unable to load activities right now.</p>;
   }
+
+  return (
+    <div className="activity-feed">
+      {loaded.map(({ entry, activity, photos }) => (
+        <ActivityCard
+          key={entry.slug}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          activity={activity as any}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          photos={(photos as any[]) || []}
+          supplementPhotos={entry.supplementPhotos}
+          notes={entry.notes}
+        />
+      ))}
+    </div>
+  );
 }

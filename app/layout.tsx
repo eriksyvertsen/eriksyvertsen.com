@@ -4,6 +4,7 @@ import LibrarianOrb from "@/components/LibrarianOrb";
 import CommandPalette from "@/components/CommandPalette";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import KonamiCode from "@/components/KonamiCode";
+import { getEnabledNavLinks } from "@/lib/site-config";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,10 +22,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const navLinks = getEnabledNavLinks();
+
   return (
     <html lang="en">
       <body>
-        <Nav />
+        <Nav links={navLinks} />
         <main>{children}</main>
         <LibrarianOrb />
         <CommandPalette />

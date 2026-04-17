@@ -2,20 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { NavLink } from "@/lib/site-config";
 
-const links = [
-  { href: "/musings", label: "Musings" },
-  { href: "/apps", label: "Apps" },
-  { href: "/kernels", label: "Kernels" },
-  { href: "/mountains", label: "Mountains" },
-  { href: "/reading", label: "Reading" },
-  { href: "/about", label: "About" },
-];
-
-export default function Nav() {
+export default function Nav({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
 
-  // Hide nav on homepage — homepage has its own navigation
   if (pathname === "/") return null;
 
   return (
