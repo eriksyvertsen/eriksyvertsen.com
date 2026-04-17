@@ -24,9 +24,9 @@ export default async function MountainsPage() {
         </div>
 
         {!stravaReady ? (
-          <p className="meta">Strava integration pending. [token missing]</p>
+          <p className="meta">Strava integration pending.</p>
         ) : entries.length === 0 ? (
-          <p className="meta">No adventures curated yet. [entries={JSON.stringify(entries)}]</p>
+          <p className="meta">No adventures curated yet.</p>
         ) : (
           <ActivityFeed entries={entries} />
         )}
