@@ -20,7 +20,14 @@ export async function GET(req: Request) {
   });
 
   if (!res.ok) {
-    return NextResponse.json({ error: "Token exchange failed" }, { status: 500 });
+    const errBody = await res.text();
+    return NextResponse.json({
+      error: "Token exchange failed",
+      status: res.status,
+      strava_response: errBody,
+      client_id_present: !!process.env.STRAVA_CLIENT_ID,
+      client_secret_present: !!process.env.STRAVA_CLIENT_SECRET,
+    }, { status: 500 });
   }
 
   const data = await res.json();
