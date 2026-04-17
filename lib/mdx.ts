@@ -26,7 +26,7 @@ export async function getArticles(section: string): Promise<ArticleMeta[]> {
       return {
         slug: file.replace(/\.mdx$/, ""),
         title: data.title || file.replace(/\.mdx$/, ""),
-        date: data.date || "",
+        date: data.date instanceof Date ? data.date.toISOString().split("T")[0] : (data.date || ""),
         description: data.description || "",
         readTime: data.readTime,
         published: data.published !== false,
@@ -54,7 +54,7 @@ export async function getArticleBySlug(
     meta: {
       slug,
       title: data.title || slug,
-      date: data.date || "",
+      date: data.date instanceof Date ? data.date.toISOString().split("T")[0] : (data.date || ""),
       description: data.description || "",
       readTime: data.readTime,
     },
