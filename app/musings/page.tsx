@@ -18,9 +18,6 @@ export default async function MusingsPage() {
           }}
         >
           <h1>Musings</h1>
-          <p className="meta" style={{ marginTop: "calc(var(--unit) * 2)" }}>
-            Policy advocacy, cultural criticism, and whatever else won&rsquo;t leave me alone.
-          </p>
         </div>
 
         {articles.map((article) => (
