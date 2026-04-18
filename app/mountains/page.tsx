@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isSectionEnabled } from "@/lib/site-config";
-import { getMountainEntries } from "@/lib/mountains";
+import { getMountainEntries, type MountainEntry } from "@/lib/mountains";
 import { getActivity, getActivityPhotos } from "@/lib/strava";
 import ActivityCard from "@/components/ActivityCard";
 
@@ -38,7 +38,7 @@ export default async function MountainsPage() {
 async function ActivityFeed({
   entries,
 }: {
-  entries: ReturnType<typeof getMountainEntries>;
+  entries: MountainEntry[];
 }) {
   const results = await Promise.allSettled(
     entries.map(async (entry) => {
