@@ -1,6 +1,7 @@
+"use client";
+
 // ActivityMap — renders a Strava activity route on a real topo map.
 // Uses Leaflet (client-side) with OpenTopoMap tiles. No API key required.
-// Falls back to a static SVG if no polyline is available.
 
 import dynamic from "next/dynamic";
 
