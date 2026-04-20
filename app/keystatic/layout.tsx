@@ -1,3 +1,5 @@
+import KeystaticReorderLink from "@/components/KeystaticReorderLink";
+
 export default function KeystaticLayout({
   children,
 }: {
@@ -5,7 +7,10 @@ export default function KeystaticLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <KeystaticReorderLink />
+      </body>
     </html>
   );
 }
