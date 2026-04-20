@@ -1,4 +1,4 @@
-import matter from "gray-matter";
+import yaml from "js-yaml";
 
 const REPO = "eriksyvertsen/eriksyvertsen.com";
 const CONTENT_PATH = "content/mountains";
@@ -34,19 +34,19 @@ export async function getMountainEntries(): Promise<MountainEntry[]> {
           next: { revalidate: 300 },
         });
         const raw = await contentRes.text();
-        const { data } = matter(raw);
+        const data = (yaml.load(raw) || {}) as Record<string, unknown>;
 
-        const supplementPhotos: string[] = (data.supplementPhotos || [])
+        const supplementPhotos: string[] = ((data.supplementPhotos as string[]) || [])
           .map((p: string) => {
             if (!p) return null;
             if (p.startsWith("/")) return p;
             return `/mountains/${p}`;
           })
-          .filter(Boolean);
+          .filter((p): p is string => Boolean(p));
 
         return {
           slug: file.name.replace(/\.(yaml|yml)$/, ""),
-          title: (data.title?.value ?? data.title) || "",
+          title: String(data.title || ""),
           stravaActivityId: String(data.stravaActivityId || "").trim(),
           published: data.published !== false,
           order: typeof data.order === "number" ? data.order : 999,
