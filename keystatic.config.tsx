@@ -106,8 +106,8 @@ export default config({
         published: fields.checkbox({ label: "Published", defaultValue: true }),
         order: fields.integer({
           label: "Display Order",
-          description: "Lower numbers appear first",
-          defaultValue: 0,
+          description: "Lower numbers appear first (1, 2, 3…). New entries default to 999.",
+          defaultValue: 999,
         }),
         supplementPhotos: fields.array(
           fields.image({
