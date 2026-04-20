@@ -49,7 +49,6 @@ export default function ActivityMapLeaflet({ polyline }: { polyline: string }) {
         doubleClickZoom: false,
         boxZoom: false,
         keyboard: false,
-        tap: false,
       });
 
       // OpenTopoMap — topo style with contours, perfect for ski/hike
