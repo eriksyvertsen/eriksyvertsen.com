@@ -1,0 +1,100 @@
+import { NextRequest, NextResponse } from "next/server";
+import yaml from "js-yaml";
+
+const REPO = "eriksyvertsen/eriksyvertsen.com";
+const CONTENT_PATH = "content/mountains";
+
+function gh(path: string, options?: RequestInit) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) throw new Error("GITHUB_TOKEN not set");
+  return fetch(`https://api.github.com${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "Content-Type": "application/json",
+      ...((options?.headers as Record<string, string>) || {}),
+    },
+  });
+}
+
+export async function GET() {
+  try {
+    const dirRes = await gh(`/repos/${REPO}/contents/${CONTENT_PATH}`);
+    if (!dirRes.ok) return NextResponse.json({ error: "GitHub API error" }, { status: 500 });
+
+    const files: Array<{ name: string; path: string; sha: string; download_url: string }> =
+      await dirRes.json();
+
+    const yamlFiles = files.filter(
+      (f) => f.name.endsWith(".yaml") || f.name.endsWith(".yml")
+    );
+
+    const entries = await Promise.all(
+      yamlFiles.map(async (file) => {
+        const raw = await fetch(file.download_url).then((r) => r.text());
+        const data = (yaml.load(raw) || {}) as Record<string, unknown>;
+        return {
+          slug: file.name.replace(/\.(yaml|yml)$/, ""),
+          title: String(data.title || file.name.replace(/\.(yaml|yml)$/, "")),
+          order: typeof data.order === "number" ? data.order : 999,
+          path: file.path,
+          sha: file.sha,
+        };
+      })
+    );
+
+    entries.sort((a, b) => a.order - b.order);
+    return NextResponse.json(entries);
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const { updates }: { updates: Array<{ path: string; order: number }> } =
+      await req.json();
+
+    const results = await Promise.allSettled(
+      updates.map(async ({ path, order }) => {
+        // Fetch current file (content is base64)
+        const fileRes = await gh(`/repos/${REPO}/contents/${path}`);
+        if (!fileRes.ok) throw new Error(`Failed to fetch ${path}`);
+        const fileData: { content: string; sha: string } = await fileRes.json();
+
+        const raw = Buffer.from(
+          fileData.content.replace(/\n/g, ""),
+          "base64"
+        ).toString("utf-8");
+
+        // Swap out the order field value; add it if missing
+        const updated = /^order:/m.test(raw)
+          ? raw.replace(/^order:\s*\d+/m, `order: ${order}`)
+          : `${raw.trimEnd()}\norder: ${order}\n`;
+
+        await gh(`/repos/${REPO}/contents/${path}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            message: `chore: update mountain display order`,
+            content: Buffer.from(updated).toString("base64"),
+            sha: fileData.sha,
+          }),
+        });
+      })
+    );
+
+    const failed = results.filter((r) => r.status === "rejected") as PromiseRejectedResult[];
+    if (failed.length > 0) {
+      return NextResponse.json(
+        { error: failed.map((f) => String(f.reason)).join(", ") },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
+}
