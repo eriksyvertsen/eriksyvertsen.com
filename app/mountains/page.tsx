@@ -35,11 +35,7 @@ export default async function MountainsPage() {
   );
 }
 
-async function ActivityFeed({
-  entries,
-}: {
-  entries: MountainEntry[];
-}) {
+async function ActivityFeed({ entries }: { entries: MountainEntry[] }) {
   const results = await Promise.allSettled(
     entries.map(async (entry) => {
       const [activity, photos] = await Promise.all([
@@ -50,30 +46,63 @@ async function ActivityFeed({
     })
   );
 
-  const loaded = results
-    .filter(
-      (r): r is PromiseFulfilledResult<{ entry: typeof entries[0]; activity: unknown; photos: unknown[] }> =>
-        r.status === "fulfilled"
-    )
-    .map((r) => r.value);
-
-  if (loaded.length === 0) {
-    return <p className="meta">Unable to load activities right now.</p>;
-  }
-
   return (
     <div className="activity-feed">
-      {loaded.map(({ entry, activity, photos }) => (
-        <ActivityCard
-          key={entry.slug}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          activity={activity as any}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          photos={(photos as any[]) || []}
-          supplementPhotos={entry.supplementPhotos}
-          notes={entry.notes}
-        />
-      ))}
+      {results.map((result, i) => {
+        const entry = entries[i];
+
+        if (result.status === "fulfilled") {
+          const { activity, photos } = result.value;
+          return (
+            <ActivityCard
+              key={entry.slug}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              activity={activity as any}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              photos={(photos as any[]) || []}
+              supplementPhotos={entry.supplementPhotos}
+              notes={entry.notes}
+            />
+          );
+        }
+
+        // Strava unavailable (rate limit, network, etc.) — show what we have
+        return (
+          <ActivityCardFallback key={entry.slug} entry={entry} />
+        );
+      })}
     </div>
+  );
+}
+
+function ActivityCardFallback({ entry }: { entry: MountainEntry }) {
+  return (
+    <article className="activity-card">
+      <div className="activity-header">
+        <div>
+          <h2 className="activity-title">{entry.title}</h2>
+          <div className="activity-meta">
+            <span className="meta">Strava data temporarily unavailable</span>
+          </div>
+        </div>
+      </div>
+
+      {entry.supplementPhotos.length > 0 && (
+        <div className="activity-photos">
+          {entry.supplementPhotos.map((url, i) => (
+            <div key={i} className="activity-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={url} alt={`${entry.title} — photo ${i + 1}`} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {entry.notes?.trim() && (
+        <div className="activity-notes">
+          <p>{entry.notes}</p>
+        </div>
+      )}
+    </article>
   );
 }
