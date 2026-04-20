@@ -120,8 +120,8 @@ interface StravaActivity {
   sport_type?: string;
   start_date_local: string;
   map?: {
-    summary_polyline?: string;
     polyline?: string;
+    summary_polyline?: string;
   };
 }
 
@@ -136,8 +136,8 @@ export default function ActivityCard({
   supplementPhotos: string[];
   notes: string;
 }) {
-  const polyline =
-    activity.map?.polyline || activity.map?.summary_polyline || "";
+  const polyline = activity.map?.polyline || activity.map?.summary_polyline || "";
+  const summaryPolyline = activity.map?.summary_polyline || polyline;
   const type = activity.sport_type || activity.type;
 
   const stats = [
@@ -154,7 +154,7 @@ export default function ActivityCard({
       {/* Map */}
       {polyline && (
         <div className="activity-map-wrap">
-          <ActivityMap polyline={polyline} />
+          <ActivityMap polyline={polyline} summaryPolyline={summaryPolyline} />
         </div>
       )}
 

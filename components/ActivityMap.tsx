@@ -1,5 +1,26 @@
-// Server component — renders a Strava activity's encoded polyline as SVG.
-// No client-side JS or map tile dependencies required.
+// Server component — renders a Strava activity route map.
+// If MAPBOX_TOKEN is set: uses Mapbox Static Images API (real terrain tiles).
+// Otherwise: falls back to a custom SVG of the route.
+
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
+
+// ── Mapbox static image (proxied — token stays server-side) ──────────────────
+
+function MapboxImage({ polyline }: { polyline: string }) {
+  // Route through /api/map so the secret token is never in page source.
+  const src = `/api/map?p=${encodeURIComponent(polyline)}`;
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt="Activity route map"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    />
+  );
+}
+
+// ── SVG fallback ──────────────────────────────────────────────────────────────
 
 function decodePolyline(encoded: string): [number, number][] {
   const points: [number, number][] = [];
@@ -33,9 +54,7 @@ const SVG_W = 680;
 const SVG_H = 260;
 const PAD = 28;
 
-export default function ActivityMap({ polyline }: { polyline: string }) {
-  if (!polyline) return null;
-
+function SVGMap({ polyline }: { polyline: string }) {
   const points = decodePolyline(polyline);
   if (points.length < 2) return null;
 
@@ -46,18 +65,15 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
   const minLng = Math.min(...lngs),
     maxLng = Math.max(...lngs);
 
-  // Guard against degenerate (single-point) routes
   const latRange = maxLat - minLat || 0.001;
   const lngRange = maxLng - minLng || 0.001;
 
-  // Scale uniformly so the route isn't distorted — pick the tighter axis
   const drawW = SVG_W - PAD * 2;
   const drawH = SVG_H - PAD * 2;
   const scaleX = drawW / lngRange;
   const scaleY = drawH / latRange;
   const scale = Math.min(scaleX, scaleY);
 
-  // Center the route in the viewBox
   const routeW = lngRange * scale;
   const routeH = latRange * scale;
   const offsetX = PAD + (drawW - routeW) / 2;
@@ -71,9 +87,7 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
 
   const svgPoints = points.map(toSvg).join(" ");
   const [startX, startY] = toSvg(points[0]).split(",").map(Number);
-  const [endX, endY] = toSvg(points[points.length - 1])
-    .split(",")
-    .map(Number);
+  const [endX, endY] = toSvg(points[points.length - 1]).split(",").map(Number);
 
   return (
     <svg
@@ -83,31 +97,9 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
         height: "auto",
         display: "block",
         background: "#EAE6E0",
-        borderRadius: "3px",
       }}
       aria-label="Activity route map"
     >
-      {/* Subtle grid lines */}
-      <line
-        x1={PAD}
-        y1={SVG_H / 2}
-        x2={SVG_W - PAD}
-        y2={SVG_H / 2}
-        stroke="#D8D3CD"
-        strokeWidth="0.5"
-        strokeDasharray="4 6"
-      />
-      <line
-        x1={SVG_W / 2}
-        y1={PAD}
-        x2={SVG_W / 2}
-        y2={SVG_H - PAD}
-        stroke="#D8D3CD"
-        strokeWidth="0.5"
-        strokeDasharray="4 6"
-      />
-
-      {/* Route shadow for depth */}
       <polyline
         points={svgPoints}
         fill="none"
@@ -118,8 +110,6 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
         opacity="0.5"
         transform="translate(1,2)"
       />
-
-      {/* Route line */}
       <polyline
         points={svgPoints}
         fill="none"
@@ -128,12 +118,8 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-
-      {/* Start dot */}
       <circle cx={startX} cy={startY} r="5" fill="#3D6B99" opacity="0.9" />
       <circle cx={startX} cy={startY} r="8" fill="#3D6B99" opacity="0.2" />
-
-      {/* End dot (if different from start — point-to-point routes) */}
       {Math.abs(endX - startX) > 4 || Math.abs(endY - startY) > 4 ? (
         <>
           <circle cx={endX} cy={endY} r="5" fill="#8A8580" opacity="0.9" />
@@ -142,4 +128,24 @@ export default function ActivityMap({ polyline }: { polyline: string }) {
       ) : null}
     </svg>
   );
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+
+export default function ActivityMap({
+  polyline,
+  summaryPolyline,
+}: {
+  polyline: string;
+  summaryPolyline?: string;
+}) {
+  if (!polyline && !summaryPolyline) return null;
+
+  if (MAPBOX_TOKEN) {
+    // Prefer summary_polyline for Mapbox (shorter URL, still accurate)
+    const routePolyline = summaryPolyline || polyline;
+    return <MapboxImage polyline={routePolyline} />;
+  }
+
+  return <SVGMap polyline={polyline} />;
 }
