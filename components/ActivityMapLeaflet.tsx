@@ -42,9 +42,14 @@ export default function ActivityMapLeaflet({ polyline }: { polyline: string }) {
 
       const map = L.map(containerRef.current, {
         scrollWheelZoom: false,
-        zoomControl: true,
-        attributionControl: true,
-        dragging: true,
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        touchZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        tap: false,
       });
 
       // OpenTopoMap — topo style with contours, perfect for ski/hike
@@ -97,7 +102,7 @@ export default function ActivityMapLeaflet({ polyline }: { polyline: string }) {
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", height: "300px", background: "#E8E4DF" }}
+      style={{ width: "100%", height: "300px", background: "#E8E4DF", pointerEvents: "none" }}
     />
   );
 }
