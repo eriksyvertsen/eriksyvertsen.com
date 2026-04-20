@@ -332,6 +332,229 @@ a:hover {
   font-size: 16.5px;
 }
 
+/* ── Signup form (end of musings posts) ── */
+.signup-form {
+  margin-top: calc(var(--unit) * 8);
+  padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.signup-form-label {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: calc(var(--unit) * 2);
+  letter-spacing: -0.01em;
+}
+
+.signup-form-row {
+  display: flex;
+  gap: calc(var(--unit) * 1);
+  flex-wrap: wrap;
+}
+
+.signup-form-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: calc(var(--unit) * 1.25) calc(var(--unit) * 1.5);
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.signup-form-input:focus {
+  border-color: var(--accent);
+}
+
+.signup-form-input:disabled {
+  opacity: 0.6;
+}
+
+.signup-form-button {
+  padding: calc(var(--unit) * 1.25) calc(var(--unit) * 2.5);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.signup-form-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.signup-form-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.signup-form-message {
+  margin-top: calc(var(--unit) * 1.5);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.signup-form-message[data-status="error"] {
+  color: #a04040;
+}
+
+.signup-form-message[data-status="success"] {
+  color: var(--accent-hover);
+}
+
+/* ══════════════════════════════════════════════
+   MOUNTAINS — activity cards
+   ══════════════════════════════════════════════ */
+
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--unit) * 10);
+  padding-bottom: calc(var(--unit) * 12);
+}
+
+.activity-card {
+  border-top: 1px solid var(--border);
+  padding-top: calc(var(--unit) * 6);
+}
+
+/* Map */
+.activity-map-wrap {
+  margin-bottom: calc(var(--unit) * 4);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Header: title left, Strava link right */
+.activity-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--unit) * 3);
+  margin-bottom: calc(var(--unit) * 3);
+}
+
+.activity-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: calc(var(--unit) * 0.5);
+}
+
+.activity-meta {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activity-meta-sep {
+  color: var(--border);
+}
+
+.strava-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  border-bottom: none !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 3px;
+  transition: color 0.2s ease;
+}
+
+.strava-link:hover {
+  color: #fc4c02;
+  border-bottom: none !important;
+}
+
+/* Stats row */
+.activity-stats {
+  display: flex;
+  gap: calc(var(--unit) * 5);
+  margin-bottom: calc(var(--unit) * 4);
+  flex-wrap: wrap;
+}
+
+.activity-stat-value {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.activity-stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* Strava description */
+.activity-description {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: calc(var(--unit) * 3);
+  line-height: 1.6;
+}
+
+/* Photo grid */
+.activity-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(var(--unit) * 1);
+  margin-bottom: calc(var(--unit) * 3);
+}
+
+.activity-photos:has(.activity-photo:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.activity-photo {
+  overflow: hidden;
+  background: var(--surface);
+  aspect-ratio: 4 / 3;
+}
+
+.activity-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.88);
+}
+
+/* Trip notes */
+.activity-notes {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.activity-notes p {
+  margin-bottom: calc(var(--unit) * 2);
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .home-title {
