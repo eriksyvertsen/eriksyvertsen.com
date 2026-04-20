@@ -332,6 +332,30 @@ a:hover {
   font-size: 16.5px;
 }
 
+.article-body ol,
+.article-body ul {
+  padding-left: calc(var(--unit) * 3);
+  margin-bottom: calc(var(--unit) * 3);
+}
+
+.article-body li {
+  margin-bottom: calc(var(--unit) * 1.5);
+  line-height: 1.7;
+  padding-left: calc(var(--unit) * 0.5);
+}
+
+.article-body li:last-child {
+  margin-bottom: 0;
+}
+
+.article-body ol {
+  list-style-type: decimal;
+}
+
+.article-body ul {
+  list-style-type: disc;
+}
+
 /* ── Signup form (end of musings posts) ── */
 .signup-form {
   margin-top: calc(var(--unit) * 8);
