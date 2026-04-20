@@ -1,44 +1,61 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function LibrarianOrb() {
   const pathname = usePathname();
-
-  // Don't show on the librarian page itself
   if (pathname === "/librarian") return null;
 
   return (
-    <Link
-      href="/librarian"
-      style={{
-        position: "fixed",
-        bottom: 24,
-        right: 24,
-        width: 36,
-        height: 36,
-        background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        border: "none",
-        cursor: "pointer",
-        zIndex: 50,
-        textDecoration: "none",
-        borderBottom: "none",
-      }}
-      title="The Librarian"
-    >
-      <span style={{ color: "var(--bg)", fontSize: 16, fontFamily: "Georgia, serif" }}>
-        L
-      </span>
+    <>
       <style>{`
-        @keyframes librarian-pulse {
-          0%, 100% { opacity: 0.8; }
-          50% { opacity: 1; }
+        @keyframes orb-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(61, 107, 153, 0.4); }
+          50% { transform: scale(1.06); box-shadow: 0 0 0 8px rgba(61, 107, 153, 0); }
+        }
+        .librarian-orb {
+          animation: orb-pulse 2.8s ease-in-out infinite;
+        }
+        .librarian-orb:hover {
+          animation: none;
+          transform: scale(1.1);
         }
       `}</style>
-    </Link>
+      <a
+        href="https://www.thelibrarian.live"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="librarian-orb"
+        title="The Librarian"
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          background: "radial-gradient(circle at 35% 35%, #5a8fc4, var(--accent) 60%, var(--accent-hover))",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 50,
+          textDecoration: "none",
+          border: "none",
+          transition: "transform 200ms ease",
+        }}
+      >
+        <span style={{
+          color: "rgba(255,255,255,0.9)",
+          fontSize: 13,
+          fontFamily: "Georgia, serif",
+          fontStyle: "italic",
+          lineHeight: 1,
+          userSelect: "none",
+        }}>
+          L
+        </span>
+      </a>
+    </>
   );
 }
