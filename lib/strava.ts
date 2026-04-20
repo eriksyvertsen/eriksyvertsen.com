@@ -1,13 +1,13 @@
 const STRAVA_API = "https://www.strava.com/api/v3";
 
-// Cache the access token for the lifetime of the module (single Vercel instance).
-// Across instances, Next.js fetch cache handles deduplication.
+// In-memory token cache — persists for the lifetime of a Vercel function instance.
+// Prevents repeated OAuth POSTs within a single instance. (POST requests are never
+// cached by Next.js's data cache, so this is the only mechanism we have.)
 let cachedToken: { token: string; expiresAt: number } | null = null;
 
 async function getAccessToken(): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
 
-  // Reuse if still valid with 5-minute buffer
   if (cachedToken && cachedToken.expiresAt > now + 300) {
     return cachedToken.token;
   }
@@ -21,8 +21,7 @@ async function getAccessToken(): Promise<string> {
       refresh_token: process.env.STRAVA_REFRESH_TOKEN,
       grant_type: "refresh_token",
     }),
-    // Cache token exchange for 50 minutes (tokens last ~6h)
-    next: { revalidate: 3000 },
+    cache: "no-store", // POST — explicitly not cacheable
   });
 
   if (!res.ok) throw new Error("Failed to refresh Strava token");
@@ -39,7 +38,7 @@ export async function getActivities(perPage = 30) {
     `${STRAVA_API}/athlete/activities?per_page=${perPage}`,
     {
       headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: 3600 },
+      next: { revalidate: 3600 }, // activity list can change; 1h is fine
     }
   );
 
@@ -49,7 +48,6 @@ export async function getActivities(perPage = 30) {
   const mountainTypes = new Set([
     "BackcountrySki", "AlpineSki", "NordicSki", "Hike", "Snowshoe",
   ]);
-
   return activities.filter((a: { type: string }) => mountainTypes.has(a.type));
 }
 
@@ -58,11 +56,12 @@ export async function getActivity(activityId: string) {
 
   const res = await fetch(`${STRAVA_API}/activities/${activityId}`, {
     headers: { Authorization: `Bearer ${token}` },
-    // Cache activity data for 1 hour — activity details rarely change
-    next: { revalidate: 3600 },
+    // Activities don't change once posted. Cache permanently — only re-fetched
+    // on a fresh deploy (when the data cache clears) or a new activity ID.
+    next: { revalidate: false },
   });
 
-  if (!res.ok) throw new Error(`Strava activity ${activityId} not found`);
+  if (!res.ok) throw new Error(`Strava activity ${activityId}: ${res.status}`);
   return res.json();
 }
 
@@ -73,7 +72,8 @@ export async function getActivityPhotos(activityId: number | string) {
     `${STRAVA_API}/activities/${activityId}/photos?size=1024`,
     {
       headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: 3600 },
+      // Same rationale — photos don't change once an activity is posted.
+      next: { revalidate: false },
     }
   );
 
