@@ -51,7 +51,7 @@ export async function getMountainEntries(): Promise<MountainEntry[]> {
           published: data.published !== false,
           order: typeof data.order === "number" ? data.order : 999,
           supplementPhotos,
-          notes: data.notes || "",
+          notes: typeof data.notes === "string" ? data.notes : "",
         };
       })
     );
