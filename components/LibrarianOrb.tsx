@@ -44,18 +44,8 @@ export default function LibrarianOrb() {
           border: "none",
           transition: "transform 200ms ease",
         }}
-      >
-        <span style={{
-          color: "rgba(255,255,255,0.9)",
-          fontSize: 13,
-          fontFamily: "Georgia, serif",
-          fontStyle: "italic",
-          lineHeight: 1,
-          userSelect: "none",
-        }}>
-          L
-        </span>
-      </a>
+      />
+
     </>
   );
 }
