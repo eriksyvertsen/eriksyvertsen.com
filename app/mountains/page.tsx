@@ -23,6 +23,11 @@ export default async function MountainsPage() {
           <p className="meta">Ski mountaineering, alpine routes, and trip reports.</p>
         </div>
 
+        {/* DEBUG - remove after fix */}
+        <p className="meta" style={{ fontSize: "11px", color: "red" }}>
+          DEBUG: stravaReady={String(stravaReady)} entries={entries.length} ids={entries.map(e => e.stravaActivityId).join(",")}
+        </p>
+
         {!stravaReady ? (
           <p className="meta">Strava integration pending.</p>
         ) : entries.length === 0 ? (
@@ -57,8 +62,16 @@ async function ActivityFeed({
     )
     .map((r) => r.value);
 
+  const failed = results.filter(r => r.status === "rejected");
   if (loaded.length === 0) {
-    return <p className="meta">Unable to load activities right now.</p>;
+    return (
+      <p className="meta">
+        Unable to load activities right now.
+        {/* DEBUG */}
+        {" "}(tried {results.length}, failed {failed.length},{" "}
+        {failed.map((r, i) => <span key={i}> err{i}: {String((r as PromiseRejectedResult).reason)}</span>)})
+      </p>
+    );
   }
 
   return (
