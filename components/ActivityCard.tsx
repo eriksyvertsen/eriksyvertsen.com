@@ -12,11 +12,11 @@ function formatTime(seconds: number): string {
 }
 
 function formatDistance(meters: number): string {
-  return (meters / 1000).toFixed(1) + " km";
+  return (meters / 1609.34).toFixed(1) + " mi";
 }
 
 function formatElevation(meters: number): string {
-  return Math.round(meters).toLocaleString() + "m";
+  return Math.round(meters * 3.28084).toLocaleString() + " ft";
 }
 
 function formatDate(iso: string): string {
