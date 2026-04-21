@@ -66,10 +66,13 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: true });
     }
 
-    const results = await Promise.allSettled(
-      changed.map(async ({ path, order }) => {
+    // Sequential — parallel commits to the same branch cause SHA conflicts
+    const errors: string[] = [];
+    for (const { path, order } of changed) {
+      try {
+        // Fresh fetch right before each PUT to get the current blob SHA
         const fileRes = await gh(`/repos/${REPO}/contents/${path}`);
-        if (!fileRes.ok) throw new Error(`Failed to fetch ${path}`);
+        if (!fileRes.ok) throw new Error(`GET failed: ${fileRes.status}`);
         const fileData: { content: string; sha: string } = await fileRes.json();
 
         const raw = Buffer.from(
@@ -92,17 +95,15 @@ export async function PATCH(req: NextRequest) {
 
         if (!putRes.ok) {
           const err = await putRes.text();
-          throw new Error(`Failed to update ${path}: ${err}`);
+          throw new Error(`PUT failed: ${err}`);
         }
-      })
-    );
+      } catch (e) {
+        errors.push(`${path}: ${String(e)}`);
+      }
+    }
 
-    const failed = results.filter((r) => r.status === "rejected") as PromiseRejectedResult[];
-    if (failed.length > 0) {
-      return NextResponse.json(
-        { error: failed.map((f) => String(f.reason)).join(", ") },
-        { status: 500 }
-      );
+    if (errors.length > 0) {
+      return NextResponse.json({ error: errors.join("\n") }, { status: 500 });
     }
 
     // Bust the mountains page ISR cache so the new order shows immediately
