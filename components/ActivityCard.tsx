@@ -1,4 +1,5 @@
 import ActivityMap from "./ActivityMap";
+import PhotoGrid from "./PhotoGrid";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -40,49 +41,11 @@ function activityLabel(type: string): string {
   return labels[type] || type;
 }
 
-// ── Photo grid ────────────────────────────────────────────────────────────────
-
 type StravaPhoto = {
   unique_id: string;
   urls?: Record<string, string>;
   caption?: string;
 };
-
-function PhotoGrid({
-  stravaPhotos,
-  supplementPhotos,
-  activityName,
-}: {
-  stravaPhotos: StravaPhoto[];
-  supplementPhotos: string[];
-  activityName: string;
-}) {
-  const stravaUrls = stravaPhotos
-    .map((p) => ({ url: p.urls?.["1024"] || p.urls?.["600"] || "", caption: p.caption || "" }))
-    .filter((p) => p.url);
-
-  const suppUrls = supplementPhotos
-    .filter(Boolean)
-    .map((url) => ({ url, caption: "" }));
-
-  const all = [...stravaUrls, ...suppUrls];
-  if (all.length === 0) return null;
-
-  return (
-    <div className="activity-photos">
-      {all.map(({ url, caption }, i) => (
-        <div key={i} className="activity-photo">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={url}
-            alt={caption || `${activityName} — photo ${i + 1}`}
-            loading="lazy"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
 
 // ── Notes ─────────────────────────────────────────────────────────────────────
 
