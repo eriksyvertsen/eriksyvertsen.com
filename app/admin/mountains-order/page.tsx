@@ -155,7 +155,7 @@ export default function MountainsOrderPage() {
     setSaving(true);
     setStatus("idle");
     try {
-      const updates = entries.map((e, i) => ({ path: e.path, order: i + 1 }));
+      const updates = entries.map((e, i) => ({ path: e.path, order: i + 1, currentOrder: e.order }));
       const res = await fetch("/api/admin/mountains-order", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

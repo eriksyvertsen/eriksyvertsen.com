@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import yaml from "js-yaml";
 
 const REPO = "eriksyvertsen/eriksyvertsen.com";
@@ -16,6 +17,7 @@ function gh(path: string, options?: RequestInit) {
       "Content-Type": "application/json",
       ...((options?.headers as Record<string, string>) || {}),
     },
+    cache: "no-store",
   });
 }
 
@@ -33,7 +35,7 @@ export async function GET() {
 
     const entries = await Promise.all(
       yamlFiles.map(async (file) => {
-        const raw = await fetch(file.download_url).then((r) => r.text());
+        const raw = await fetch(file.download_url, { cache: "no-store" }).then((r) => r.text());
         const data = (yaml.load(raw) || {}) as Record<string, unknown>;
         return {
           slug: file.name.replace(/\.(yaml|yml)$/, ""),
@@ -54,12 +56,18 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const { updates }: { updates: Array<{ path: string; order: number }> } =
+    const { updates }: { updates: Array<{ path: string; order: number; currentOrder: number }> } =
       await req.json();
 
+    // Only write files whose order actually changed
+    const changed = updates.filter((u) => u.order !== u.currentOrder);
+
+    if (changed.length === 0) {
+      return NextResponse.json({ ok: true, skipped: true });
+    }
+
     const results = await Promise.allSettled(
-      updates.map(async ({ path, order }) => {
-        // Fetch current file (content is base64)
+      changed.map(async ({ path, order }) => {
         const fileRes = await gh(`/repos/${REPO}/contents/${path}`);
         if (!fileRes.ok) throw new Error(`Failed to fetch ${path}`);
         const fileData: { content: string; sha: string } = await fileRes.json();
@@ -69,12 +77,11 @@ export async function PATCH(req: NextRequest) {
           "base64"
         ).toString("utf-8");
 
-        // Swap out the order field value; add it if missing
         const updated = /^order:/m.test(raw)
           ? raw.replace(/^order:\s*\d+/m, `order: ${order}`)
           : `${raw.trimEnd()}\norder: ${order}\n`;
 
-        await gh(`/repos/${REPO}/contents/${path}`, {
+        const putRes = await gh(`/repos/${REPO}/contents/${path}`, {
           method: "PUT",
           body: JSON.stringify({
             message: `chore: update mountain display order`,
@@ -82,6 +89,11 @@ export async function PATCH(req: NextRequest) {
             sha: fileData.sha,
           }),
         });
+
+        if (!putRes.ok) {
+          const err = await putRes.text();
+          throw new Error(`Failed to update ${path}: ${err}`);
+        }
       })
     );
 
@@ -93,7 +105,10 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ ok: true });
+    // Bust the mountains page ISR cache so the new order shows immediately
+    revalidatePath("/mountains");
+
+    return NextResponse.json({ ok: true, updated: changed.length });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
