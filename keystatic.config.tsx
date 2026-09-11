@@ -26,6 +26,7 @@ export default config({
         apps: fields.checkbox({ label: "Apps / Vibe Code", defaultValue: false }),
         kernels: fields.checkbox({ label: "Kernels", defaultValue: false }),
         librarian: fields.checkbox({ label: "Librarian", defaultValue: false }),
+        snowpack: fields.checkbox({ label: "Avy Model", defaultValue: false }),
       },
     }),
 

@@ -14,11 +14,17 @@ export default async function Home() {
         <h1 className="home-title">Erik Syvertsen</h1>
 
         <nav className="home-nav" aria-label="Main navigation">
-          {navLinks.map(({ href, label }, i) => (
+          {navLinks.map(({ href, label, external }, i) => (
             <span key={href}>
-              <Link href={href} className="nav-link home-nav-link">
-                {label}
-              </Link>
+              {external ? (
+                <a href={href} className="nav-link home-nav-link">
+                  {label}
+                </a>
+              ) : (
+                <Link href={href} className="nav-link home-nav-link">
+                  {label}
+                </Link>
+              )}
               {i < navLinks.length - 1 && (
                 <span className="home-nav-separator" aria-hidden="true">·</span>
               )}

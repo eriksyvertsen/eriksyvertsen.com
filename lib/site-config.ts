@@ -8,7 +8,8 @@ export type SectionKey =
   | "reading"
   | "apps"
   | "kernels"
-  | "librarian";
+  | "librarian"
+  | "snowpack";
 
 export interface SiteConfig {
   musings: boolean;
@@ -18,6 +19,7 @@ export interface SiteConfig {
   apps: boolean;
   kernels: boolean;
   librarian: boolean;
+  snowpack: boolean;
 }
 
 const DEFAULTS: SiteConfig = {
@@ -28,6 +30,7 @@ const DEFAULTS: SiteConfig = {
   apps: false,
   kernels: false,
   librarian: false,
+  snowpack: false,
 };
 
 export function getSiteConfig(): SiteConfig {
@@ -49,6 +52,12 @@ export function isSectionEnabled(section: SectionKey): boolean {
 export interface NavLink {
   href: string;
   label: string;
+  /**
+   * Rendered as a plain <a> rather than next/link. The target lives in a separate Next.js
+   * app proxied in by a multi-zone rewrite, so the client router cannot resolve it and a
+   * soft navigation would fail.
+   */
+  external?: boolean;
 }
 
 const ALL_NAV_LINKS: (NavLink & { section: SectionKey })[] = [
@@ -58,12 +67,13 @@ const ALL_NAV_LINKS: (NavLink & { section: SectionKey })[] = [
   { href: "/apps", label: "Apps", section: "apps" },
   { href: "/kernels", label: "Kernels", section: "kernels" },
   { href: "/librarian", label: "Librarian", section: "librarian" },
+  { href: "/snowpack", label: "Avy Model", section: "snowpack", external: true },
   { href: "/about", label: "About", section: "about" },
 ];
 
 export function getEnabledNavLinks(): NavLink[] {
   const config = getSiteConfig();
   return ALL_NAV_LINKS.filter(({ section }) => config[section]).map(
-    ({ href, label }) => ({ href, label })
+    ({ href, label, external }) => ({ href, label, ...(external ? { external } : {}) })
   );
 }

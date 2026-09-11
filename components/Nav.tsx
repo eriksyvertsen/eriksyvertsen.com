@@ -18,16 +18,20 @@ export default function Nav({ links }: { links: NavLink[] }) {
           </Link>
           <nav>
             <ul className="site-nav">
-              {links.map(({ href, label }) => {
+              {links.map(({ href, label, external }) => {
                 const isActive = pathname.startsWith(href);
+                const className = `nav-link${isActive ? " active" : ""}`;
                 return (
                   <li key={href}>
-                    <Link
-                      href={href}
-                      className={`nav-link${isActive ? " active" : ""}`}
-                    >
-                      {label}
-                    </Link>
+                    {external ? (
+                      <a href={href} className={className}>
+                        {label}
+                      </a>
+                    ) : (
+                      <Link href={href} className={className}>
+                        {label}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
