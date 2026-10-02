@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getArticleBySlug, getAllSlugs } from "@/lib/mdx";
+import SignupForm from "@/components/SignupForm";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -38,6 +39,7 @@ export default async function MusingArticle({ params }: Props) {
       <div className="article-body">
         <MDXRemote source={article.content} />
       </div>
+      <SignupForm />
     </div></div>
   );
 }

@@ -332,6 +332,13 @@ a:hover {
   font-size: 16.5px;
 }
 
+.article-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: calc(var(--unit) * 4) 0;
+}
+
 .article-body ol,
 .article-body ul {
   padding-left: calc(var(--unit) * 3);
