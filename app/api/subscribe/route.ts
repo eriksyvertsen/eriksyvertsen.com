@@ -1,3 +1,5 @@
+import { put, BlobError } from "@vercel/blob";
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const rateLimits = new Map<string, { count: number; resetAt: number }>();
@@ -15,31 +17,34 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-async function persistToSheet(
+function emailToSlug(email: string): string {
+  return email
+    .toLowerCase()
+    .replace(/@/g, "-at-")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+async function persist(
   email: string,
   createdAt: string,
   source?: string
 ): Promise<"created" | "exists" | "error"> {
-  const url = process.env.SUBSCRIBE_WEBHOOK_URL;
-  const secret = process.env.SUBSCRIBE_WEBHOOK_SECRET;
-  if (!url || !secret) {
-    console.error("[subscribe] SUBSCRIBE_WEBHOOK_URL / SUBSCRIBE_WEBHOOK_SECRET not set");
-    return "error";
-  }
-
   try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ secret, email, createdAt, source: source ?? "" }),
-      redirect: "follow",
-    });
-    const data = await res.json().catch(() => null);
-    if (res.ok && data?.ok) return data.exists ? "exists" : "created";
-    console.error(`[subscribe] sheet write failed: ${res.status} ${JSON.stringify(data)}`);
-    return "error";
+    await put(
+      `subscribers/${emailToSlug(email)}.json`,
+      JSON.stringify({ email, createdAt, source: source ?? "" }),
+      {
+        access: "private",
+        contentType: "application/json",
+        addRandomSuffix: false,
+        allowOverwrite: false,
+      }
+    );
+    return "created";
   } catch (err) {
-    console.error("[subscribe] sheet write threw:", err);
+    if (err instanceof BlobError && /already exists/i.test(err.message)) return "exists";
+    console.error("[subscribe] blob write failed:", err);
     return "error";
   }
 }
@@ -72,7 +77,7 @@ export async function POST(req: Request) {
   }
 
   const createdAt = new Date().toISOString();
-  const result = await persistToSheet(email, createdAt, source);
+  const result = await persist(email, createdAt, source);
 
   console.log(`[subscribe] email=${email} result=${result} ip=${ip}`);
 
