@@ -1,14 +1,3 @@
-import fs from "fs";
-import path from "path";
-
-const contentDir = path.join(process.cwd(), "content", "subscribers");
-
-interface Subscriber {
-  email: string;
-  createdAt: string;
-  source?: string;
-}
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const rateLimits = new Map<string, { count: number; resetAt: number }>();
@@ -26,73 +15,31 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-function emailToSlug(email: string): string {
-  return email
-    .toLowerCase()
-    .replace(/@/g, "-at-")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+async function persistToSheet(
+  email: string,
+  createdAt: string,
+  source?: string
+): Promise<"created" | "exists" | "error"> {
+  const url = process.env.SUBSCRIBE_WEBHOOK_URL;
+  const secret = process.env.SUBSCRIBE_WEBHOOK_SECRET;
+  if (!url || !secret) {
+    console.error("[subscribe] SUBSCRIBE_WEBHOOK_URL / SUBSCRIBE_WEBHOOK_SECRET not set");
+    return "error";
+  }
 
-function yamlQuote(value: string): string {
-  return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
-}
-
-function toYaml(sub: Subscriber): string {
-  const lines = [
-    `email: ${yamlQuote(sub.email)}`,
-    `createdAt: ${yamlQuote(sub.createdAt)}`,
-    `source: ${yamlQuote(sub.source ?? "")}`,
-  ];
-  return lines.join("\n") + "\n";
-}
-
-const GH_OWNER = "eriksyvertsen";
-const GH_REPO = "eriksyvertsen.com";
-const GH_BRANCH = "main";
-
-async function persistToGitHub(
-  slug: string,
-  yaml: string,
-  email: string
-): Promise<"created" | "exists" | "skipped" | "error"> {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) return "skipped";
-
-  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/content/subscribers/${slug}.yaml`;
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "eriksyvertsen.com-subscribe",
-    },
-    body: JSON.stringify({
-      message: `Add subscriber ${email}`,
-      content: Buffer.from(yaml, "utf-8").toString("base64"),
-      branch: GH_BRANCH,
-    }),
-  });
-
-  if (res.ok) return "created";
-  if (res.status === 422) return "exists";
-
-  const text = await res.text().catch(() => "");
-  console.error(`[subscribe] GitHub commit failed: ${res.status} ${text}`);
-  return "error";
-}
-
-function persistToDisk(slug: string, yaml: string): "created" | "exists" | "error" {
   try {
-    if (!fs.existsSync(contentDir)) fs.mkdirSync(contentDir, { recursive: true });
-    const filePath = path.join(contentDir, `${slug}.yaml`);
-    if (fs.existsSync(filePath)) return "exists";
-    fs.writeFileSync(filePath, yaml, "utf-8");
-    return "created";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ secret, email, createdAt, source: source ?? "" }),
+      redirect: "follow",
+    });
+    const data = await res.json().catch(() => null);
+    if (res.ok && data?.ok) return data.exists ? "exists" : "created";
+    console.error(`[subscribe] sheet write failed: ${res.status} ${JSON.stringify(data)}`);
+    return "error";
   } catch (err) {
-    console.error("[subscribe] disk write failed:", err);
+    console.error("[subscribe] sheet write threw:", err);
     return "error";
   }
 }
@@ -125,18 +72,9 @@ export async function POST(req: Request) {
   }
 
   const createdAt = new Date().toISOString();
-  const subscriber: Subscriber = { email, createdAt, source };
-  const slug = emailToSlug(email);
-  const yaml = toYaml(subscriber);
+  const result = await persistToSheet(email, createdAt, source);
 
-  const useGitHub = !!process.env.GITHUB_TOKEN;
-  const result = useGitHub
-    ? await persistToGitHub(slug, yaml, email)
-    : persistToDisk(slug, yaml);
-
-  console.log(
-    `[subscribe] email=${email} slug=${slug} via=${useGitHub ? "github" : "disk"} result=${result} ip=${ip}`
-  );
+  console.log(`[subscribe] email=${email} result=${result} ip=${ip}`);
 
   if (result === "error") {
     return Response.json(
