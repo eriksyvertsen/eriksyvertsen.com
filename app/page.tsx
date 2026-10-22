@@ -6,7 +6,7 @@ export default async function Home() {
   const navLinks = getEnabledNavLinks();
   const musingsArticles = await getArticles("musings");
 
-  const recent = musingsArticles[0];
+  const recent = musingsArticles.slice(0, 3);
 
   return (
     <div className="home-landing">
@@ -32,19 +32,23 @@ export default async function Home() {
           ))}
         </nav>
 
-        {recent && (
+        {recent.length > 0 && (
           <div className="home-recent">
             <div className="home-recent-label heading-font">Recent</div>
-            <p className="home-recent-entry">
-              <Link href={`/musings/${recent.slug}`}>{recent.title}</Link>
-            </p>
-            <p className="meta">
-              {new Date(recent.date).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}{" "}
-              · Musings
-            </p>
+            {recent.map((article) => (
+              <div key={article.slug} className="home-recent-item">
+                <p className="home-recent-entry">
+                  <Link href={`/musings/${article.slug}`}>{article.title}</Link>
+                </p>
+                <p className="meta">
+                  {new Date(article.date).toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })}{" "}
+                  · Musings
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </div>
