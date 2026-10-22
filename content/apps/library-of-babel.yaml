@@ -1,9 +1,11 @@
 title: Library of Babel
-url: '#'
+url: https://libraryofbabel.replit.app/
+github: https://github.com/eriksyvertsen/Mining-the-Library-of-Babel
+thumbnail: /apps/library-of-babel.png
 tech:
-  - JavaScript
-  - HTML
-  - CSS
-description: A digital implementation of Borges' infinite library concept, generating and searching through all possible combinations of text.
-published: false
-order: 2
+  - Python
+  - Genetic algorithms
+  - Language models
+description: An evolutionary miner for Borges' infinite library. It breeds populations of page IDs, scores each page's coherence with a language model, and keeps the best, searching for meaning in a sea of randomness.
+published: true
+order: 3
