@@ -1,0 +1,11 @@
+title: Avalanche Forecast
+url: /snowpack
+github: https://github.com/eriksyvertsen/adk-snowpack
+thumbnail: /apps/avy-model.png
+tech:
+  - Python
+  - Weather data
+  - Snowpack modeling
+description: Weather-driven snowpack model and avalanche hazard indicators for the Adirondack High Peaks. A rebuild of the Excel model I kept from 2016–18, with replay for any day this season.
+published: true
+order: 0

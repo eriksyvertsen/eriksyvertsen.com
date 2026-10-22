@@ -5,5 +5,5 @@ tech:
   - HTML
   - CSS
 description: A digital implementation of Borges' infinite library concept, generating and searching through all possible combinations of text.
-published: true
+published: false
 order: 2

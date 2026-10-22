@@ -1,0 +1,11 @@
+title: RIA Venture Leads
+url: https://usvc-ria-research.vercel.app/
+github: https://github.com/eriksyvertsen/usvc-ria-research
+thumbnail: /apps/ria.png
+tech:
+  - Next.js
+  - SEC Form ADV
+  - LLM analysis
+description: Wealth-channel RIAs screened from SEC Form ADV filings and brochures for venture and private-markets fit. Filter by tier, state, custodian and AUM, then export to CSV.
+published: true
+order: 1

@@ -57,6 +57,8 @@ export function getBooksGrouped(): { name: string; books: Book[] }[] {
 export interface App {
   title: string;
   url: string;
+  github?: string;
+  thumbnail?: string;
   tech: string[];
   description: string;
   published: boolean;

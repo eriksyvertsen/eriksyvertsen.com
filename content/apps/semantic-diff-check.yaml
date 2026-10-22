@@ -1,9 +1,11 @@
-title: Semantic Diff Check
-url: '#'
+title: WhatDiff
+url: https://whatdiff.com
+github: https://github.com/eriksyvertsen/SemanticDiffChecker
+thumbnail: /apps/whatdiff.png
 tech:
   - Python
   - Flask
   - NLP
-description: A tool for semantic comparison of text changes that goes beyond simple string matching to understand meaning and context.
+description: A text comparison tool that goes beyond string matching. It highlights added, removed and moved text, then scores whether a change is a rewording or genuinely new information.
 published: true
-order: 0
+order: 2

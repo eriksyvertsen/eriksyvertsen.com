@@ -3,8 +3,8 @@
   "mountains": true,
   "about": true,
   "reading": false,
-  "apps": false,
+  "apps": true,
   "kernels": false,
   "librarian": false,
-  "snowpack": true
+  "snowpack": false
 }

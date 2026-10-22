@@ -23,10 +23,10 @@ export default config({
         mountains: fields.checkbox({ label: "Mountains", defaultValue: false }),
         about: fields.checkbox({ label: "About", defaultValue: true }),
         reading: fields.checkbox({ label: "Reading", defaultValue: false }),
-        apps: fields.checkbox({ label: "Apps / Vibe Code", defaultValue: false }),
+        apps: fields.checkbox({ label: "Personal Apps", defaultValue: false }),
         kernels: fields.checkbox({ label: "Kernels", defaultValue: false }),
         librarian: fields.checkbox({ label: "Librarian", defaultValue: false }),
-        snowpack: fields.checkbox({ label: "Avy Model", defaultValue: false }),
+        snowpack: fields.checkbox({ label: "Avy Model (legacy nav link)", defaultValue: false }),
       },
     }),
 
@@ -67,6 +67,12 @@ export default config({
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
         url: fields.text({ label: "URL" }),
+        github: fields.text({ label: "GitHub URL" }),
+        thumbnail: fields.image({
+          label: "Thumbnail",
+          directory: "public/apps",
+          publicPath: "/apps/",
+        }),
         tech: fields.array(fields.text({ label: "Technology" }), {
           label: "Tech Stack",
         }),

@@ -64,10 +64,9 @@ const ALL_NAV_LINKS: (NavLink & { section: SectionKey })[] = [
   { href: "/musings", label: "Musings", section: "musings" },
   { href: "/mountains", label: "Mountains", section: "mountains" },
   { href: "/reading", label: "Reading", section: "reading" },
-  { href: "/apps", label: "Apps", section: "apps" },
+  { href: "/apps", label: "Personal Apps", section: "apps" },
   { href: "/kernels", label: "Kernels", section: "kernels" },
   { href: "/librarian", label: "Librarian", section: "librarian" },
-  { href: "/snowpack", label: "Avy Model", section: "snowpack", external: true },
   { href: "/about", label: "About", section: "about" },
 ];
 

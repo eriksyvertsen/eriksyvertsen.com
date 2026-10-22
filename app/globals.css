@@ -156,6 +156,10 @@ a:hover {
   margin-bottom: 6px;
 }
 
+.home-recent-item + .home-recent-item {
+  margin-top: calc(var(--unit) * 3);
+}
+
 
 /* ══════════════════════════════════════════════
    SITE HEADER (non-home pages)
@@ -677,4 +681,72 @@ a:hover {
   .site-nav {
     gap: calc(var(--unit) * 0.5) calc(var(--unit) * 1.5);
   }
+}
+
+/* ── Personal Apps cards ── */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: calc(var(--unit) * 4);
+}
+
+.app-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.app-card-thumb {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--border);
+}
+
+.app-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.app-card-placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-family: var(--font-heading);
+}
+
+.app-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--unit) * 1.5);
+  padding: calc(var(--unit) * 2.5);
+  flex: 1;
+}
+
+.app-card-title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.app-card-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
+  flex: 1;
+}
+
+.app-card-links {
+  display: flex;
+  gap: calc(var(--unit) * 2);
+  font-size: 14px;
 }
