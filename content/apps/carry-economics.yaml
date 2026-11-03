@@ -4,6 +4,6 @@ thumbnail: /apps/carry-economics.png
 tech:
   - JavaScript
   - Interactive modeling
-description: Compares LP returns when you buy a secondary at a discount for accrued carry versus paying full price and resetting the carry hurdle. Adjust price, cost basis, reset rate and exit multiple to see that the two structures match on return on capital deployed.
+description: "Carry is a call option, so its burden on LPs is nonlinear: delta climbs toward the carry rate as a fund moves into the money while gamma fades to zero. An interactive model for pricing LP secondaries net of carry."
 published: true
 order: 5
