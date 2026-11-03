@@ -1,0 +1,8 @@
+title: Macro Pulse
+url: https://macro-pulse-xi.vercel.app/#/
+tech:
+  - Vercel
+  - Economic data
+description: The U.S. economy at a glance. A single-page dashboard of the key macro indicators.
+published: true
+order: 4
