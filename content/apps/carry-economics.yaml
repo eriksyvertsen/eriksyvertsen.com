@@ -1,0 +1,9 @@
+title: Secondary Carry Economics
+url: https://carry-economics.vercel.app/
+thumbnail: /apps/carry-economics.png
+tech:
+  - JavaScript
+  - Interactive modeling
+description: Compares LP returns when you buy a secondary at a discount for accrued carry versus paying full price and resetting the carry hurdle. Adjust price, cost basis, reset rate and exit multiple to see that the two structures match on return on capital deployed.
+published: true
+order: 5
