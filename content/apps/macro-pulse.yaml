@@ -1,11 +1,12 @@
 title: Macro Pulse
 url: https://macro-pulse-xi.vercel.app/#/
 github: https://github.com/eriksyvertsen/Macro-Model-2-22
+thumbnail: /apps/macro-pulse.png
 tech:
   - Python
   - Plotly Dash
   - FRED API
   - JavaScript
-description: The U.S. economy at a glance. Pulls monthly indicators from the St. Louis Fed's FRED database and classifies each trend as positive, negative or neutral on a single dashboard.
+description: The U.S. economy at a glance. Blends 17 indicators from FRED into a single 0–100 conditions score, benchmarked to the average month since 2010, with category breakdowns and recession shading.
 published: true
 order: 4
