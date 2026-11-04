@@ -1,9 +1,10 @@
 title: Big Mac Energy Converter
-url: '#'
+url: https://big-mac-energy-converter.replit.app
+github: https://github.com/eriksyvertsen/BigMac-Energy-Calculator
 tech:
   - JavaScript
   - HTML
   - CSS
-description: A whimsical energy unit converter that translates various energy measurements into Big Mac equivalents. My first vibe-coded app using GPT-2!
-published: false
-order: 1
+description: How many Big Macs' worth of energy does the Hoover Dam generate? Enter a figure in kilowatts and get the answer in Big Macs.
+published: true
+order: 6
